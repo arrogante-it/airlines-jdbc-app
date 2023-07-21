@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirPlaneDAOImpl implements AirPlaneDAO {
-
     private static final String INSERT_AIRPLANE_SQL =
             "insert into Airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
     private static final String SELECT_BY_CODENAME_SQL =

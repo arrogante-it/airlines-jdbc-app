@@ -22,7 +22,6 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode
 public class CrewMember {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

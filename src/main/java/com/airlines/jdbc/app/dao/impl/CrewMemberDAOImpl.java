@@ -26,7 +26,11 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
     @Override
     public void saveCrewMember(CrewMember crewMember) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
-            saveCrewMember(crewMember, connection);
+            statement.setString(1, crewMember.getFirstName());
+            statement.setString(2, crewMember.getLastName());
+            statement.setString(3, crewMember.getPosition());
+            statement.setString(4, crewMember.getBirthday());
+            statement.setString(5, crewMember.getCitizenship());
             statement.executeUpdate();
         }
     }
@@ -34,7 +38,11 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
     @Override
     public void updateCrewMember(CrewMember crewMember) throws SQLException {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_CREW_MEMBER)) {
-            saveCrewMember(crewMember, connection);
+            statement.setString(1, crewMember.getFirstName());
+            statement.setString(2, crewMember.getLastName());
+            statement.setString(3, crewMember.getPosition());
+            statement.setString(4, crewMember.getBirthday());
+            statement.setString(5, crewMember.getCitizenship());
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
         }
@@ -51,16 +59,6 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             }
         }
         return null;
-    }
-
-    private void saveCrewMember(CrewMember crewMember, Connection connection) throws SQLException {
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
-            statement.setString(1, crewMember.getFirstName());
-            statement.setString(2, crewMember.getLastName());
-            statement.setString(3, crewMember.getPosition());
-            statement.setString(4, crewMember.getBirthday());
-            statement.setString(5, crewMember.getCitizenship());
-        }
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
