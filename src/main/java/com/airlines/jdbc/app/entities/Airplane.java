@@ -1,5 +1,6 @@
 package com.airlines.jdbc.app.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -22,6 +23,7 @@ import javax.persistence.Table;
 @Accessors(chain = true)
 @Getter
 @Setter
+@EqualsAndHashCode
 public class Airplane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

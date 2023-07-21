@@ -1,5 +1,6 @@
 package com.airlines.jdbc.app.entities;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -12,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -20,6 +20,7 @@ import java.util.List;
 @Accessors(chain = true)
 @Getter
 @Setter
+@EqualsAndHashCode
 public class CrewMember {
 
     @Id
