@@ -1,8 +1,8 @@
-package com.airlines.jdbc.app.dao.impl;
+package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.dao.AirPlaneDAO;
-import com.airlines.jdbc.app.entities.Airplane;
-import com.airlines.jdbc.app.entities.Crew;
+import com.airlines.jdbc.app.persistance.dao.AirPlaneDAO;
+import com.airlines.jdbc.app.persistance.entities.Airplane;
+import com.airlines.jdbc.app.persistance.entities.Crew;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -67,6 +67,7 @@ public class AirPlaneDAOImplTest {
     @Test
     public void testFindAirplaneByCode() throws SQLException {
         String codeName = "ABC123";
+
         Airplane expectedAirplane = new Airplane()
                 .setId(1L)
                 .setCodeName("ABC123")
@@ -96,6 +97,7 @@ public class AirPlaneDAOImplTest {
     @Test
     public void testFindAllAirplanes() throws SQLException {
         List<Airplane> expectedAirplanes = new ArrayList<>();
+
         expectedAirplanes.add(new Airplane()
                 .setId(1L)
                 .setCodeName("ABC123")
@@ -152,7 +154,9 @@ public class AirPlaneDAOImplTest {
     @Test
     public void testSearchAirplanesByCrewName() throws SQLException {
         String crewName = "Crew A";
+
         List<Airplane> expectedAirplanes = new ArrayList<>();
+
         expectedAirplanes.add(new Airplane()
                 .setId(1L)
                 .setCodeName("ABC123")

@@ -1,8 +1,8 @@
-package com.airlines.jdbc.app.dao.impl;
+package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.dao.CrewDAO;
-import com.airlines.jdbc.app.entities.Crew;
-import com.airlines.jdbc.app.entities.CrewMember;
+import com.airlines.jdbc.app.persistance.dao.CrewDAO;
+import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -138,8 +138,8 @@ public class CrewDAOImplTest {
 
     @Test
     public void testLinkCrewMemberToCrew() throws SQLException {
-        Long crewMemberId = 1L;
-        Long crewId = 2L;
+        long crewMemberId = 1L;
+        long crewId = 2L;
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
 

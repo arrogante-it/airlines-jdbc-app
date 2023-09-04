@@ -1,7 +1,17 @@
-package com.airlines.jdbc.app.dao.impl;
+package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.dao.CrewMemberDAO;
-import com.airlines.jdbc.app.entities.CrewMember;
+import static com.airlines.jdbc.app.constants.CrewMemberConstants.FIND_CREW_MEMBER_BY_ID;
+import static com.airlines.jdbc.app.constants.CrewMemberConstants.INSERT_CREW_MEMBER;
+import static com.airlines.jdbc.app.constants.CrewMemberConstants.UPDATE_CREW_MEMBER;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
+import com.airlines.jdbc.app.persistance.entities.CrewMember;
+import com.airlines.jdbc.app.exception.SQLCustomException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,14 +19,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class CrewMemberDAOImpl implements CrewMemberDAO {
-    private static final String INSERT_CREW_MEMBER =
-            "insert into CrewMember (first_name, last_name, position, birthday, citizenship) values (?, ?, ?, ?, ?)";
-    private static final String UPDATE_CREW_MEMBER =
-            "update CrewMember set first_name = ?, last_name = ?, position = ?, birthday = ?, citizenship = ? " +
-                    "where id = ?";
-    private static final String FIND_CREW_MEMBER_BY_ID =
-            "select * from CrewMember where id = ?";
-
     private final Connection connection;
 
     public CrewMemberDAOImpl(Connection connection) {
@@ -24,7 +26,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
     }
 
     @Override
-    public void saveCrewMember(CrewMember crewMember) throws SQLException {
+    public void saveCrewMember(CrewMember crewMember) {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
@@ -32,11 +34,13 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setString(4, crewMember.getBirthday());
             statement.setString(5, crewMember.getCitizenship());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
         }
     }
 
     @Override
-    public void updateCrewMember(CrewMember crewMember) throws SQLException {
+    public void updateCrewMember(CrewMember crewMember) {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_CREW_MEMBER)) {
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
@@ -45,11 +49,13 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setString(5, crewMember.getCitizenship());
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
         }
     }
 
     @Override
-    public CrewMember findCrewMemberById(Long id) throws SQLException {
+    public CrewMember findCrewMemberById(Long id) {
         try (PreparedStatement statement = connection.prepareStatement(FIND_CREW_MEMBER_BY_ID)) {
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
@@ -57,18 +63,22 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
                     return extractCrewMemberFromResultSet(resultSet);
                 }
             }
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
         }
         return null;
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
         CrewMember crewMember = new CrewMember();
+
         crewMember.setId(resultSet.getLong("id"));
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));
         crewMember.setPosition(resultSet.getString("position"));
         crewMember.setBirthday(resultSet.getString("birthday"));
         crewMember.setCitizenship(resultSet.getString("citizenship"));
+
         return crewMember;
     }
 }

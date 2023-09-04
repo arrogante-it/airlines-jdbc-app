@@ -1,7 +1,7 @@
-package com.airlines.jdbc.app.dao.impl;
+package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.dao.CrewMemberDAO;
-import com.airlines.jdbc.app.entities.CrewMember;
+import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
+import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -83,6 +83,7 @@ public class CrewMemberDAOImplTest {
     @Test
     public void testFindCrewMemberById() throws SQLException {
         Long id = 1L;
+
         CrewMember expectedCrewMember = new CrewMember()
                 .setId(1L)
                 .setFirstName("John")

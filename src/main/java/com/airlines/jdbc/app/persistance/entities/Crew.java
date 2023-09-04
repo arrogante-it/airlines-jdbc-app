@@ -1,4 +1,4 @@
-package com.airlines.jdbc.app.entities;
+package com.airlines.jdbc.app.persistance.entities;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -1,8 +1,20 @@
-package com.airlines.jdbc.app.dao.impl;
+package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.dao.AirPlaneDAO;
-import com.airlines.jdbc.app.entities.Airplane;
-import com.airlines.jdbc.app.entities.Crew;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.INSERT_AIRPLANE_SQL;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.DELETE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_AIRPLANE_BY_NAME;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_ALL_SQL;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_BY_CODENAME_SQL;
+import static com.airlines.jdbc.app.constants.AirPlaneConstants.UPDATE_AIRPLANE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import com.airlines.jdbc.app.persistance.dao.AirPlaneDAO;
+import com.airlines.jdbc.app.persistance.entities.Airplane;
+import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.exception.SQLCustomException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,20 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirPlaneDAOImpl implements AirPlaneDAO {
-    private static final String INSERT_AIRPLANE_SQL =
-            "insert into Airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
-    private static final String SELECT_BY_CODENAME_SQL =
-            "select * from Airplane where codeName = ?";
-    private static final String SELECT_ALL_SQL =
-            "select * from Airplane";
-    private static final String DELETE_AIRPLANE =
-            "delete from Airplane where id = ?";
-    private static final String SELECT_AIRPLANE_BY_NAME =
-            "select * from Airplane where crew_id in (select id from Crew where name = ?)";
-    private static final String UPDATE_AIRPLANE =
-            "update Airplane set crew_id = ? where id = ?";
-
-
     private final Connection connection;
 
     public AirPlaneDAOImpl(Connection connection) {
@@ -34,81 +32,99 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
     }
 
     @Override
-    public void saveAirplane(Airplane airplane) throws SQLException {
+    public void saveAirplane(Airplane airplane) {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL)) {
             statement.setString(1, airplane.getCodeName());
             statement.setString(2, airplane.getModel());
             statement.setString(3, airplane.getManufactureDate());
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
+
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
         }
     }
 
     @Override
-    public Airplane findAirplaneByCode(String codeName) throws SQLException {
+    public Airplane findAirplaneByCode(String codeName) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_CODENAME_SQL)) {
             statement.setString(1, codeName);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return extractAirplaneFromResultSet(resultSet);
-                }
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return extractAirplaneFromResultSet(resultSet);
             }
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
         }
         return null;
     }
 
     @Override
-    public List<Airplane> findAllAirplanes() throws SQLException {
+    public List<Airplane> findAllAirplanes() {
         List<Airplane> airplanes = new ArrayList<>();
+
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(SELECT_ALL_SQL)) {
             while (resultSet.next()) {
                 airplanes.add(extractAirplaneFromResultSet(resultSet));
             }
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE, e);
         }
         return airplanes;
     }
 
     @Override
-    public void deleteAirplane(Airplane airplane) throws SQLException {
+    public void deleteAirplane(Airplane airplane) {
         try (PreparedStatement statement = connection.prepareStatement(DELETE_AIRPLANE)) {
             statement.setLong(1, airplane.getId());
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_DELETE_EXCEPTION_MESSAGE, e);
         }
     }
 
     @Override
-    public List<Airplane> searchAirplanesByCrewName(String crewName) throws SQLException {
+    public List<Airplane> searchAirplanesByCrewName(String crewName) {
         List<Airplane> airplanes = new ArrayList<>();
+
         try (PreparedStatement statement = connection.prepareStatement(SELECT_AIRPLANE_BY_NAME)) {
             statement.setString(1, crewName);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                while (resultSet.next()) {
-                    airplanes.add(extractAirplaneFromResultSet(resultSet));
-                }
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                airplanes.add(extractAirplaneFromResultSet(resultSet));
             }
+        } catch (SQLException e) {
+            throw new SQLCustomException(e);
         }
         return airplanes;
     }
 
     @Override
-    public void updateAirplaneWithCrew(Airplane airplane, Crew crew) throws SQLException {
+    public void updateAirplaneWithCrew(Airplane airplane, Crew crew) {
         try (PreparedStatement statement = connection.prepareStatement(UPDATE_AIRPLANE)) {
             statement.setLong(1, crew.getId());
             statement.setLong(2, airplane.getId());
+
             statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLCustomException(CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, e);
         }
     }
 
     private Airplane extractAirplaneFromResultSet(ResultSet resultSet) throws SQLException {
         Airplane airplane = new Airplane();
+
         airplane.setId(resultSet.getLong("id"));
         airplane.setCodeName(resultSet.getString("code_name"));
         airplane.setModel(resultSet.getString("model"));
         airplane.setManufactureDate(resultSet.getString("manufacture_date"));
         airplane.setCapacity(resultSet.getInt("capacity"));
         airplane.setFlightRange(resultSet.getInt("flight_range"));
+
         return airplane;
     }
 }
