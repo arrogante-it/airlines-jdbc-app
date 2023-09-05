@@ -3,15 +3,12 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 import static com.airlines.jdbc.app.constants.CrewMemberConstants.FIND_CREW_MEMBER_BY_ID;
 import static com.airlines.jdbc.app.constants.CrewMemberConstants.INSERT_CREW_MEMBER;
 import static com.airlines.jdbc.app.constants.CrewMemberConstants.UPDATE_CREW_MEMBER;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
-import com.airlines.jdbc.app.exception.SQLCustomException;
+import com.airlines.jdbc.app.exception.SQLOperationException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +32,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setString(5, crewMember.getCitizenship());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -50,7 +47,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -64,7 +61,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
         }
         return null;
     }

@@ -14,7 +14,7 @@ import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_
 import com.airlines.jdbc.app.persistance.dao.AirPlaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
-import com.airlines.jdbc.app.exception.SQLCustomException;
+import com.airlines.jdbc.app.exception.SQLOperationException;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -42,7 +42,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -56,7 +56,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
                 return extractAirplaneFromResultSet(resultSet);
             }
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
         }
         return null;
     }
@@ -71,7 +71,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
                 airplanes.add(extractAirplaneFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE, e);
         }
         return airplanes;
     }
@@ -82,7 +82,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
             statement.setLong(1, airplane.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_DELETE_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_DELETE_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -98,7 +98,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
                 airplanes.add(extractAirplaneFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new SQLCustomException(e);
+            throw new SQLOperationException(e);
         }
         return airplanes;
     }
@@ -111,7 +111,7 @@ public class AirPlaneDAOImpl implements AirPlaneDAO {
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLCustomException(CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, e);
         }
     }
 

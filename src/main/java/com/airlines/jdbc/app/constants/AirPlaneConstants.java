@@ -2,15 +2,15 @@ package com.airlines.jdbc.app.constants;
 
 public class AirPlaneConstants {
     public static final String INSERT_AIRPLANE_SQL =
-            "insert into Airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
+            "insert into airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
     public static final String SELECT_BY_CODENAME_SQL =
-            "select * from Airplane where codeName = ?";
+            "select * from airplane where codeName = ?";
     public static final String SELECT_ALL_SQL =
-            "select * from Airplane";
+            "select * from airplane";
     public static final String DELETE_AIRPLANE =
-            "delete from Airplane where id = ?";
+            "delete from airplane where id = ?";
     public static final String SELECT_AIRPLANE_BY_NAME =
-            "select * from Airplane where crew_id in (select id from Crew where name = ?)";
+            "select * from airplane where crew_id in (select id from crew where name = ?)";
     public static final String UPDATE_AIRPLANE =
-            "update Airplane set crew_id = ? where id = ?";
+            "update airplane set crew_id = ? where id = ?";
 }

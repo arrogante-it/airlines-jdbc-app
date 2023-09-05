@@ -17,20 +17,20 @@
 ## Program main functional:
 
 ### AirPlaneDAO methods:
-- saveAirPlane
-- findAirPlaneByCode
-- findAllAirplanes
-- deleteAirPlane
-- searchAirplanesByCrewName
-- updateAirPlaneWithCrew
+- Save airplane
+- Find airplane by code
+- Find all airplanes
+- Delete airplane
+- Search airplanes by crew name
+- Update airplane with crew
 
 ### CrewDAO methods:
-- addNewCrewMemberToCrew
-- getListOfCrewMembersByCrewId
-- getListOfCrewMemberByCrewName
-- linkCrewMemberToCrew
+- Add new crew member to crew
+- Get list of crew members by crew id
+- Get list of crew member by crew name
+- Link crew member to crew
 
 ### CrewMemberDAO methods:
-- saveCrewMember
-- updateCrewMember
-- findCrewMemberById
+- Save crew member
+- Update crew member
+- Find crew member by id

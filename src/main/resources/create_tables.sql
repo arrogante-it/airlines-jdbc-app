@@ -1,4 +1,4 @@
-create table Airplane (
+create table airplane (
     id bigint auto_increment primary key,
     codeName varchar(255) not null,
     model varchar(255) not null,
@@ -6,15 +6,15 @@ create table Airplane (
     capacity int not null,
     flight_range int not null,
     crew_id bigint,
-    foreign key (crew_id) references Crew(id)
+    foreign key (crew_id) references crew(id)
 );
 
-create table Crew (
+create table crew (
     id bigint auto_increment primary key,
     name varchar(255) not null
 );
 
-create table CrewMember (
+create table crewmember (
     id bigint auto_increment primary key,
     first_name varchar(255) not null,
     last_name varchar(255) not null,
@@ -23,10 +23,10 @@ create table CrewMember (
     citizenship varchar(255) not null
 );
 
-create table Crew_Crew_Member (
+create table crew_crew_member (
     crew_id bigint,
     crew_member_id bigint,
     primary key (crew_id, crew_member_id),
-    foreign key (crew_id) references Crew(id),
-    foreign key (crew_member_id) references CrewMember(id)
+    foreign key (crew_id) references crew(id),
+    foreign key (crew_member_id) references crewmember(id)
 );

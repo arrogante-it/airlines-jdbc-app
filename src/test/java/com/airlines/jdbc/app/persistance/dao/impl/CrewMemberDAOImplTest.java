@@ -12,16 +12,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CrewMemberDAOImplTest {
     private static final String INSERT_CREW_MEMBER =
-            "insert into CrewMember (first_name, last_name, position, birthday, citizenship) values (?, ?, ?, ?, ?)";
+            "insert into crewmember (first_name, last_name, position, birthday, citizenship) values (?, ?, ?, ?, ?)";
     private static final String UPDATE_CREW_MEMBER =
-            "update CrewMember set first_name = ?, last_name = ?, position = ?, birthday = ?, citizenship = ? " +
+            "update crewmember set first_name = ?, last_name = ?, position = ?, birthday = ?, citizenship = ? " +
                     "where id = ?";
     private static final String FIND_CREW_MEMBER_BY_ID =
-            "select * from CrewMember where id = ?";
+            "select * from crewmember where id = ?";
 
     private CrewMemberDAO crewMemberDAO;
     private Connection connection;

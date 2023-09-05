@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table
+@Table(name = "crew")
 @Accessors(chain = true)
 @Getter
 @Setter

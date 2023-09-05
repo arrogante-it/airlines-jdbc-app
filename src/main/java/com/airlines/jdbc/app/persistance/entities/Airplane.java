@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table()
+@Table(name = "airplane")
 @Accessors(chain = true)
 @Getter
 @Setter
