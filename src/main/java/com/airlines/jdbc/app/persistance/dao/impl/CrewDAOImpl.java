@@ -50,7 +50,7 @@ public class CrewDAOImpl implements CrewDAO {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE + crewId, e);
         }
         return crewMembers;
     }

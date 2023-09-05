@@ -26,18 +26,19 @@ public class Airplane {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, name = "code_name")
     private String codeName;
 
     @Column(nullable = false)
     private String model;
 
-    @Column(name = "manufacture_date")
+    @Column(nullable = false, name = "manufacture_date")
     private String manufactureDate;
 
+    @Column(nullable = false, name = "capacity")
     private int capacity;
 
-    @Column(name = "flight_range")
+    @Column(nullable = false, name = "flight_range")
     private int flightRange;
 
     @JoinColumn(name = "crew_id")
