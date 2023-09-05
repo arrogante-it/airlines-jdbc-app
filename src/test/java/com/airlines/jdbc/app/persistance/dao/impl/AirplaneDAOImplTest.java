@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.persistance.dao.AirPlaneDAO;
+import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class AirPlaneDAOImplTest {
+public class AirplaneDAOImplTest {
     private static final String INSERT_AIRPLANE_SQL =
             "insert into airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
     private static final String SELECT_BY_CODENAME_SQL =
@@ -33,13 +33,13 @@ public class AirPlaneDAOImplTest {
     private static final String UPDATE_AIRPLANE =
             "update airplane set crew_id = ? where id = ?";
 
-    private AirPlaneDAO airPlaneDAO;
+    private AirplaneDAO airPlaneDAO;
     private Connection connection;
 
     @BeforeEach
     public void setUp() {
         connection = Mockito.mock(Connection.class);
-        airPlaneDAO = new AirPlaneDAOImpl(connection);
+        airPlaneDAO = new AirplaneDAOImpl(connection);
     }
 
     @Test

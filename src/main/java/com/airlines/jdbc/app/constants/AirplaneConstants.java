@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.constants;
 
-public class AirPlaneConstants {
+public class AirplaneConstants {
     public static final String INSERT_AIRPLANE_SQL =
             "insert into airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
     public static final String SELECT_BY_CODENAME_SQL =

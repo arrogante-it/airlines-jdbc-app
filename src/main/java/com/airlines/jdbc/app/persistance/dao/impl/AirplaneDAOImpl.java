@@ -1,17 +1,17 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.INSERT_AIRPLANE_SQL;
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.DELETE_AIRPLANE;
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_AIRPLANE_BY_NAME;
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_ALL_SQL;
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.SELECT_BY_CODENAME_SQL;
-import static com.airlines.jdbc.app.constants.AirPlaneConstants.UPDATE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.INSERT_AIRPLANE_SQL;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.DELETE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.SELECT_AIRPLANE_BY_NAME;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.SELECT_ALL_SQL;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.SELECT_BY_CODENAME_SQL;
+import static com.airlines.jdbc.app.constants.AirplaneConstants.UPDATE_AIRPLANE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
-import com.airlines.jdbc.app.persistance.dao.AirPlaneDAO;
+import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.exception.SQLOperationException;
@@ -24,10 +24,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirPlaneDAOImpl implements AirPlaneDAO {
+public class AirplaneDAOImpl implements AirplaneDAO {
     private final Connection connection;
 
-    public AirPlaneDAOImpl(Connection connection) {
+    public AirplaneDAOImpl(Connection connection) {
         this.connection = connection;
     }
 
