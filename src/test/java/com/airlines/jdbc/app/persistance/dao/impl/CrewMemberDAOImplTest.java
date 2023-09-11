@@ -2,6 +2,8 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
+import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship.UK;
+import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition.CAP;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,9 +40,9 @@ public class CrewMemberDAOImplTest {
         CrewMember crewMember = new CrewMember()
                 .setFirstName("John")
                 .setLastName("Doe")
-                .setPosition("Pilot")
+                .setPosition(CAP)
                 .setBirthday("1991-01-07")
-                .setCitizenship("USA");
+                .setCitizenship(UK);
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
 
@@ -50,9 +52,9 @@ public class CrewMemberDAOImplTest {
 
         verify(statement).setString(1, crewMember.getFirstName());
         verify(statement).setString(2, crewMember.getLastName());
-        verify(statement).setString(3, crewMember.getPosition());
+        verify(statement).setObject(3, crewMember.getPosition());
         verify(statement).setString(4, crewMember.getBirthday());
-        verify(statement).setString(5, crewMember.getCitizenship());
+        verify(statement).setObject(5, crewMember.getCitizenship());
         verify(statement).executeUpdate();
     }
 
@@ -62,9 +64,9 @@ public class CrewMemberDAOImplTest {
                 .setId(1L)
                 .setFirstName("John")
                 .setLastName("Doe")
-                .setPosition("Pilot")
+                .setPosition(CAP)
                 .setBirthday("1991-01-07")
-                .setCitizenship("USA");
+                .setCitizenship(UK);
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
 
@@ -74,9 +76,9 @@ public class CrewMemberDAOImplTest {
 
         verify(statement).setString(1, crewMember.getFirstName());
         verify(statement).setString(2, crewMember.getLastName());
-        verify(statement).setString(3, crewMember.getPosition());
+        verify(statement).setObject(3, crewMember.getPosition());
         verify(statement).setString(4, crewMember.getBirthday());
-        verify(statement).setString(5, crewMember.getCitizenship());
+        verify(statement).setObject(5, crewMember.getCitizenship());
         verify(statement).setLong(6, crewMember.getId());
         verify(statement).executeUpdate();
     }
@@ -89,9 +91,9 @@ public class CrewMemberDAOImplTest {
                 .setId(1L)
                 .setFirstName("John")
                 .setLastName("Doe")
-                .setPosition("Pilot")
+                .setPosition(CAP)
                 .setBirthday("1991-01-07")
-                .setCitizenship("USA");
+                .setCitizenship(UK);
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
 
@@ -103,9 +105,9 @@ public class CrewMemberDAOImplTest {
         when(resultSet.getLong("id")).thenReturn(1L);
         when(resultSet.getString("first_name")).thenReturn("John");
         when(resultSet.getString("last_name")).thenReturn("Doe");
-        when(resultSet.getString("position")).thenReturn("Pilot");
+        when(resultSet.getString("position")).thenReturn(CAP.getName());
         when(resultSet.getString("birthday")).thenReturn("1991-01-07");
-        when(resultSet.getString("citizenship")).thenReturn("USA");
+        when(resultSet.getString("citizenship")).thenReturn(UK.getName());
 
         CrewMember actualCrewMember = crewMemberDAO.findCrewMemberById(id);
 

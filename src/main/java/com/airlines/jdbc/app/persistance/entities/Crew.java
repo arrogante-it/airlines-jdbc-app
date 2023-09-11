@@ -23,7 +23,6 @@ import java.util.List;
 @Accessors(chain = true)
 @Getter
 @Setter
-@EqualsAndHashCode
 public class Crew {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

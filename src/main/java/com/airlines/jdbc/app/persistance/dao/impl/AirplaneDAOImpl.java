@@ -15,6 +15,7 @@ import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.exception.SQLOperationException;
+import com.airlines.jdbc.app.persistance.entities.enamFields.AirplaneModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +36,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     public void saveAirplane(Airplane airplane) {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL)) {
             statement.setString(1, airplane.getCodeName());
-            statement.setString(2, airplane.getModel());
+            statement.setObject(2, airplane.getModel());
             statement.setString(3, airplane.getManufactureDate());
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
@@ -120,7 +121,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
 
         airplane.setId(resultSet.getLong("id"));
         airplane.setCodeName(resultSet.getString("code_name"));
-        airplane.setModel(resultSet.getString("model"));
+        airplane.setModel((AirplaneModel) resultSet.getObject("model"));
         airplane.setManufactureDate(resultSet.getString("manufacture_date"));
         airplane.setCapacity(resultSet.getInt("capacity"));
         airplane.setFlightRange(resultSet.getInt("flight_range"));

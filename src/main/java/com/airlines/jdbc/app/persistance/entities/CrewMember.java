@@ -1,5 +1,7 @@
 package com.airlines.jdbc.app.persistance.entities;
 
+import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship;
+import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,13 +35,13 @@ public class CrewMember {
     private String lastName;
 
     @Column(nullable = false, name = "position")
-    private String position;
+    private CrewMemberPosition position;
 
     @Column(nullable = false, name = "birthday")
     private String birthday;
 
     @Column(nullable = false, name = "citizenship")
-    private String citizenship;
+    private CrewMemberCitizenship citizenship;
 
     @ManyToMany(mappedBy = "crew_members")
     List<Crew> crews = new ArrayList<Crew>();

@@ -11,6 +11,8 @@ import com.airlines.jdbc.app.persistance.dao.CrewDAO;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.exception.SQLOperationException;
+import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship;
+import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -90,9 +92,9 @@ public class CrewDAOImpl implements CrewDAO {
         crewMember.setId(resultSet.getLong("id"));
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));
-        crewMember.setPosition(resultSet.getString("position"));
+        crewMember.setPosition((CrewMemberPosition) resultSet.getObject("position"));
         crewMember.setBirthday(resultSet.getString("birthday"));
-        crewMember.setCitizenship(resultSet.getString("citizenship"));
+        crewMember.setCitizenship((CrewMemberCitizenship) resultSet.getObject("citizenship"));
 
         return crewMember;
     }
