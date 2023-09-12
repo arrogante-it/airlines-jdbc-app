@@ -16,6 +16,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class CrewMemberDAOImpl implements CrewMemberDAO {
     private final Connection connection;
@@ -30,7 +31,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
             statement.setObject(3, crewMember.getPosition());
-            statement.setString(4, crewMember.getBirthday());
+            statement.setObject(4, crewMember.getBirthday());
             statement.setObject(5, crewMember.getCitizenship());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -44,12 +45,13 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
             statement.setObject(3, crewMember.getPosition());
-            statement.setString(4, crewMember.getBirthday());
+            statement.setObject(4, crewMember.getBirthday());
             statement.setObject(5, crewMember.getCitizenship());
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_UPDATE_EXCEPTION_MESSAGE, crewMember.getId()), e);
         }
     }
 
@@ -63,7 +65,8 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, id), e);
         }
         return null;
     }
@@ -75,7 +78,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));
         crewMember.setPosition((CrewMemberPosition) resultSet.getObject("position"));
-        crewMember.setBirthday(resultSet.getString("birthday"));
+        crewMember.setBirthday((LocalDate) resultSet.getObject("birthday"));
         crewMember.setCitizenship((CrewMemberCitizenship) resultSet.getObject("citizenship"));
 
         return crewMember;

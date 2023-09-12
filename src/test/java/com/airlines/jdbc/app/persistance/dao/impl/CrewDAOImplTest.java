@@ -3,8 +3,6 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 import com.airlines.jdbc.app.persistance.dao.CrewDAO;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
-import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship.AUS;
-import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship.MEX;
 import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition.CAP;
 import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship.UK;
 import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition.SER;
@@ -16,6 +14,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +51,7 @@ public class CrewDAOImplTest {
                 .setFirstName("John")
                 .setLastName("Doe")
                 .setPosition(CAP)
-                .setBirthday("1991-01-07")
+                .setBirthday(LocalDate.parse("1991-01-07"))
                 .setCitizenship(UK);
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
@@ -75,14 +74,14 @@ public class CrewDAOImplTest {
                 .setFirstName("John")
                 .setLastName("Doe")
                 .setPosition(CAP)
-                .setBirthday("1991-01-07")
+                .setBirthday(LocalDate.parse("1991-01-07"))
                 .setCitizenship(UK));
         expectedCrewMembers.add(new CrewMember()
                 .setId(2L)
                 .setFirstName("John")
                 .setLastName("London")
                 .setPosition(SER)
-                .setBirthday("1986-04-26")
+                .setBirthday(LocalDate.parse("1986-04-26"))
                 .setCitizenship(UK));
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
@@ -94,9 +93,9 @@ public class CrewDAOImplTest {
         when(resultSet.getLong("id")).thenReturn(1L, 2L);
         when(resultSet.getString("first_name")).thenReturn("John", "John");
         when(resultSet.getString("last_name")).thenReturn("Doe", "London");
-        when(resultSet.getString("position")).thenReturn(CAP.getName(), SER.getName());
-        when(resultSet.getString("birthday")).thenReturn("1991-01-07", "1986-04-26");
-        when(resultSet.getString("citizenship")).thenReturn(UK.getName(), UK.getName());
+        when(resultSet.getObject("position")).thenReturn(CAP, SER);
+        when(resultSet.getObject("birthday")).thenReturn(LocalDate.parse("1991-01-07"), LocalDate.parse("1986-04-26"));
+        when(resultSet.getObject("citizenship")).thenReturn(UK, UK);
 
         List<CrewMember> actualCrewMembers = crewDAO.getListOfCrewMembersByCrewId(crewId);
 
@@ -113,14 +112,14 @@ public class CrewDAOImplTest {
                 .setFirstName("John")
                 .setLastName("Doe")
                 .setPosition(CAP)
-                .setBirthday("1991-01-07")
+                .setBirthday(LocalDate.parse("1991-01-07"))
                 .setCitizenship(UK));
         expectedCrewMembers.add(new CrewMember()
                 .setId(2L)
                 .setFirstName("John")
                 .setLastName("London")
                 .setPosition(SER)
-                .setBirthday("1986-04-26")
+                .setBirthday(LocalDate.parse("1986-04-26"))
                 .setCitizenship(UK));
 
         PreparedStatement statement = Mockito.mock(PreparedStatement.class);
@@ -132,9 +131,9 @@ public class CrewDAOImplTest {
         when(resultSet.getLong("id")).thenReturn(1L, 2L);
         when(resultSet.getString("first_name")).thenReturn("John", "John");
         when(resultSet.getString("last_name")).thenReturn("Doe", "London");
-        when(resultSet.getString("position")).thenReturn(CAP.getName(), SER.getName());
-        when(resultSet.getString("birthday")).thenReturn("1991-01-07", "1986-04-26");
-        when(resultSet.getString("citizenship")).thenReturn(UK.getName(), UK.getName());
+        when(resultSet.getObject("position")).thenReturn(CAP, SER);
+        when(resultSet.getObject("birthday")).thenReturn(LocalDate.parse("1991-01-07"), LocalDate.parse("1986-04-26"));
+        when(resultSet.getObject("citizenship")).thenReturn(UK, UK);
 
         List<CrewMember> actualCrewMembers = crewDAO.getListOfCrewMemberByCrewName(crewName);
 

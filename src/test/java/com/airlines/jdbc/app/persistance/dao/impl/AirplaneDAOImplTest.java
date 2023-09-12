@@ -3,7 +3,6 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
-import com.airlines.jdbc.app.persistance.entities.enamFields.AirplaneModel;
 import static com.airlines.jdbc.app.persistance.entities.enamFields.AirplaneModel.AIRBUS;
 import static com.airlines.jdbc.app.persistance.entities.enamFields.AirplaneModel.BOEING;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +35,7 @@ public class AirplaneDAOImplTest {
             "select * from airplane where crew_id in (select id from crew where name = ?)";
     private static final String UPDATE_AIRPLANE =
             "update airplane set crew_id = ? where id = ?";
+    private static final LocalDate DATE = LocalDate.parse("2023-09-12");
 
     private AirplaneDAO airPlaneDAO;
     private Connection connection;
@@ -50,7 +51,7 @@ public class AirplaneDAOImplTest {
         Airplane airplane = new Airplane()
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000);
 
@@ -62,7 +63,7 @@ public class AirplaneDAOImplTest {
 
         verify(statement).setString(1, airplane.getCodeName());
         verify(statement).setObject(2, airplane.getModel());
-        verify(statement).setString(3, airplane.getManufactureDate());
+        verify(statement).setObject(3, airplane.getManufactureDate());
         verify(statement).setInt(4, airplane.getCapacity());
         verify(statement).setInt(5, airplane.getFlightRange());
         verify(statement).executeUpdate();
@@ -76,7 +77,7 @@ public class AirplaneDAOImplTest {
                 .setId(1L)
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000);
 
@@ -88,8 +89,8 @@ public class AirplaneDAOImplTest {
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getLong("id")).thenReturn(1L);
         when(resultSet.getString("code_name")).thenReturn("ABC123");
-        when(resultSet.getString("model")).thenReturn(BOEING.getName());
-        when(resultSet.getString("manufacture_date")).thenReturn("2000-03-03");
+        when(resultSet.getObject("model")).thenReturn(BOEING);
+        when(resultSet.getObject("manufacture_date")).thenReturn(DATE);
         when(resultSet.getInt("capacity")).thenReturn(300);
         when(resultSet.getInt("flight_range")).thenReturn(7000);
 
@@ -106,14 +107,14 @@ public class AirplaneDAOImplTest {
                 .setId(1L)
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000));
         expectedAirplanes.add(new Airplane()
                 .setId(2L)
                 .setCodeName("ZXC123")
                 .setModel(AIRBUS)
-                .setManufactureDate("2007-07-07")
+                .setManufactureDate(LocalDate.parse("2007-07-07"))
                 .setCapacity(200)
                 .setFlightRange(5000));
 
@@ -125,8 +126,8 @@ public class AirplaneDAOImplTest {
         when(resultSet.next()).thenReturn(true, true, false);
         when(resultSet.getLong("id")).thenReturn(1L, 2L);
         when(resultSet.getString("code_name")).thenReturn("ABC123", "ZXC123");
-        when(resultSet.getString("model")).thenReturn(BOEING.getName(), AIRBUS.getName());
-        when(resultSet.getString("manufacture_date")).thenReturn("2000-03-03", "2007-07-07");
+        when(resultSet.getObject("model")).thenReturn(BOEING, AIRBUS);
+        when(resultSet.getObject("manufacture_date")).thenReturn(DATE, LocalDate.parse("2007-07-07"));
         when(resultSet.getInt("capacity")).thenReturn(300, 200);
         when(resultSet.getInt("flight_range")).thenReturn(7000, 5000);
 
@@ -141,7 +142,7 @@ public class AirplaneDAOImplTest {
                 .setId(1L)
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000);
 
@@ -165,14 +166,14 @@ public class AirplaneDAOImplTest {
                 .setId(1L)
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000));
         expectedAirplanes.add(new Airplane()
                 .setId(2L)
                 .setCodeName("ZXC123")
                 .setModel(AIRBUS)
-                .setManufactureDate("2007-07-07")
+                .setManufactureDate(LocalDate.parse("2007-07-07"))
                 .setCapacity(200)
                 .setFlightRange(5000));
 
@@ -184,8 +185,8 @@ public class AirplaneDAOImplTest {
         when(resultSet.next()).thenReturn(true, true, false);
         when(resultSet.getLong("id")).thenReturn(1L, 2L);
         when(resultSet.getString("code_name")).thenReturn("ABC123", "ZXC123");
-        when(resultSet.getString("model")).thenReturn(BOEING.getName(), AIRBUS.getName());
-        when(resultSet.getString("manufacture_date")).thenReturn("2000-03-03", "2007-07-07");
+        when(resultSet.getObject("model")).thenReturn(BOEING, AIRBUS);
+        when(resultSet.getObject("manufacture_date")).thenReturn(DATE, LocalDate.parse("2007-07-07"));
         when(resultSet.getInt("capacity")).thenReturn(300, 200);
         when(resultSet.getInt("flight_range")).thenReturn(7000, 5000);
 
@@ -200,7 +201,7 @@ public class AirplaneDAOImplTest {
                 .setId(1L)
                 .setCodeName("ABC123")
                 .setModel(BOEING)
-                .setManufactureDate("2000-03-03")
+                .setManufactureDate(DATE)
                 .setCapacity(300)
                 .setFlightRange(7000);
         Crew crew = new Crew()

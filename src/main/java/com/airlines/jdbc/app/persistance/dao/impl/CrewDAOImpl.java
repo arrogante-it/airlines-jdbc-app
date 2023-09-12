@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,8 @@ public class CrewDAOImpl implements CrewDAO {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE + crewId, e);
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, crewId), e);
         }
         return crewMembers;
     }
@@ -69,7 +71,8 @@ public class CrewDAOImpl implements CrewDAO {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with crew name: %2s", CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, crewName), e);
         }
         return crewMembers;
     }
@@ -93,7 +96,7 @@ public class CrewDAOImpl implements CrewDAO {
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));
         crewMember.setPosition((CrewMemberPosition) resultSet.getObject("position"));
-        crewMember.setBirthday(resultSet.getString("birthday"));
+        crewMember.setBirthday((LocalDate) resultSet.getObject("birthday"));
         crewMember.setCitizenship((CrewMemberCitizenship) resultSet.getObject("citizenship"));
 
         return crewMember;

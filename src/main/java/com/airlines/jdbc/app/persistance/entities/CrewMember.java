@@ -14,15 +14,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "crewmember")
 @Accessors(chain = true)
 @Getter
 @Setter
-@EqualsAndHashCode
 public class CrewMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,11 +39,30 @@ public class CrewMember {
     private CrewMemberPosition position;
 
     @Column(nullable = false, name = "birthday")
-    private String birthday;
+    private LocalDate birthday;
 
     @Column(nullable = false, name = "citizenship")
     private CrewMemberCitizenship citizenship;
 
     @ManyToMany(mappedBy = "crew_members")
     List<Crew> crews = new ArrayList<Crew>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CrewMember that = (CrewMember) o;
+        return id.equals(that.id) &&
+                firstName.equals(that.firstName) &&
+                lastName.equals(that.lastName) &&
+                position == that.position &&
+                birthday.equals(that.birthday) &&
+                citizenship == that.citizenship &&
+                crews.equals(that.crews);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, position, birthday, citizenship, crews);
+    }
 }

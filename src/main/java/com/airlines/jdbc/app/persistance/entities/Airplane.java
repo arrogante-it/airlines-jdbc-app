@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
@@ -34,7 +35,7 @@ public class Airplane {
     private AirplaneModel model;
 
     @Column(nullable = false, name = "manufacture_date")
-    private String manufactureDate;
+    private LocalDate manufactureDate;
 
     @Column(nullable = false, name = "capacity")
     private int capacity;

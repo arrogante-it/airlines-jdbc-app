@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "crew")
@@ -41,4 +42,20 @@ public class Crew {
             inverseJoinColumns = @JoinColumn(name = "crew_member_id")
     )
     List<CrewMember> crewMembers = new ArrayList<CrewMember>();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Crew crew = (Crew) o;
+        return id.equals(crew.id) &&
+                name.equals(crew.name) &&
+                airplanes.equals(crew.airplanes) &&
+                crewMembers.equals(crew.crewMembers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, airplanes, crewMembers);
+    }
 }

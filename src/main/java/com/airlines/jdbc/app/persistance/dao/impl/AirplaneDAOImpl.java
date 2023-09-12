@@ -22,6 +22,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,13 +38,14 @@ public class AirplaneDAOImpl implements AirplaneDAO {
         try (PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL)) {
             statement.setString(1, airplane.getCodeName());
             statement.setObject(2, airplane.getModel());
-            statement.setString(3, airplane.getManufactureDate());
+            statement.setObject(3, airplane.getManufactureDate());
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
 
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_INSERT_EXCEPTION_MESSAGE, airplane.getId()), e);
         }
     }
 
@@ -57,7 +59,8 @@ public class AirplaneDAOImpl implements AirplaneDAO {
                 return extractAirplaneFromResultSet(resultSet);
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with code name = %2s", CAN_NOT_SELECT_EXCEPTION_MESSAGE, codeName), e);
         }
         return null;
     }
@@ -83,7 +86,8 @@ public class AirplaneDAOImpl implements AirplaneDAO {
             statement.setLong(1, airplane.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_DELETE_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_DELETE_EXCEPTION_MESSAGE, airplane.getId()), e);
         }
     }
 
@@ -122,7 +126,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
         airplane.setId(resultSet.getLong("id"));
         airplane.setCodeName(resultSet.getString("code_name"));
         airplane.setModel((AirplaneModel) resultSet.getObject("model"));
-        airplane.setManufactureDate(resultSet.getString("manufacture_date"));
+        airplane.setManufactureDate((LocalDate) resultSet.getObject("manufacture_date"));
         airplane.setCapacity(resultSet.getInt("capacity"));
         airplane.setFlightRange(resultSet.getInt("flight_range"));
 
