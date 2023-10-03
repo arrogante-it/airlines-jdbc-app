@@ -1,4 +1,4 @@
-package com.airlines.jdbc.app.persistance.entities.enamFields;
+package com.airlines.jdbc.app.persistance.entities;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

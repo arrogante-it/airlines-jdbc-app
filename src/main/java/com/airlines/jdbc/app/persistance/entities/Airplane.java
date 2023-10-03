@@ -1,51 +1,81 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-import com.airlines.jdbc.app.persistance.entities.enamFields.AirplaneModel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.Accessors;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@Entity
-@Table(name = "airplane")
-@Accessors(chain = true)
-@Getter
-@Setter
 public class Airplane {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, name = "code_name")
     private String codeName;
 
-    @Column(nullable = false, name = "model")
     private AirplaneModel model;
 
-    @Column(nullable = false, name = "manufacture_date")
     private LocalDate manufactureDate;
 
-    @Column(nullable = false, name = "capacity")
     private int capacity;
 
-    @Column(nullable = false, name = "flight_range")
     private int flightRange;
 
-    @JoinColumn(name = "crew_id")
-    @ManyToOne(fetch = FetchType.LAZY)
     private Crew crew;
+
+    private Airplane(Builder builder) {
+        this.id = builder.id;
+        this.codeName = builder.codeName;
+        this.model = builder.model;
+        this.manufactureDate = builder.manufactureDate;
+        this.capacity = builder.capacity;
+        this.flightRange = builder.flightRange;
+        this.crew = builder.crew;
+    }
+
+    public static class Builder {
+        private Long id;
+        private AirplaneModel model;
+        private String codeName;
+        private LocalDate manufactureDate;
+        private int capacity;
+        private int flightRange;
+        private Crew crew;
+
+        public Builder id(Long id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder model(AirplaneModel model) {
+            this.model = model;
+            return this;
+        }
+
+        public Builder capacity(int capacity) {
+            this.capacity = capacity;
+            return this;
+        }
+
+        public Builder flightRange(int flightRange) {
+            this.flightRange = flightRange;
+            return this;
+        }
+
+        public Builder codeName(String codeName) {
+            this.codeName = codeName;
+            return this;
+        }
+
+        public Builder manufactureDate(LocalDate manufactureDate) {
+            this.manufactureDate = manufactureDate;
+            return this;
+        }
+
+        public Builder crew(Crew crew) {
+            this.crew = crew;
+            return this;
+        }
+
+        public Airplane build() {
+            return new Airplane(this);
+        }
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -64,5 +94,74 @@ public class Airplane {
     @Override
     public int hashCode() {
         return Objects.hash(id, codeName, model, manufactureDate, capacity, flightRange, crew);
+    }
+
+    @Override
+    public String toString() {
+        return "Airplane{" +
+                "id=" + id +
+                ", codeName='" + codeName + '\'' +
+                ", model=" + model +
+                ", manufactureDate=" + manufactureDate +
+                ", capacity=" + capacity +
+                ", flightRange=" + flightRange +
+                ", crew=" + crew +
+                '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCodeName() {
+        return codeName;
+    }
+
+    public void setCodeName(String codeName) {
+        this.codeName = codeName;
+    }
+
+    public AirplaneModel getModel() {
+        return model;
+    }
+
+    public void setModel(AirplaneModel model) {
+        this.model = model;
+    }
+
+    public LocalDate getManufactureDate() {
+        return manufactureDate;
+    }
+
+    public void setManufactureDate(LocalDate manufactureDate) {
+        this.manufactureDate = manufactureDate;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getFlightRange() {
+        return flightRange;
+    }
+
+    public void setFlightRange(int flightRange) {
+        this.flightRange = flightRange;
+    }
+
+    public Crew getCrew() {
+        return crew;
+    }
+
+    public void setCrew(Crew crew) {
+        this.crew = crew;
     }
 }

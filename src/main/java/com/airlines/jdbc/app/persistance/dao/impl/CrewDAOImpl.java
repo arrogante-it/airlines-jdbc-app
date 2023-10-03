@@ -11,8 +11,8 @@ import com.airlines.jdbc.app.persistance.dao.CrewDAO;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.exception.SQLOperationException;
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship;
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -43,38 +43,40 @@ public class CrewDAOImpl implements CrewDAO {
 
     @Override
     public List<CrewMember> getListOfCrewMembersByCrewId(Long crewId) {
-        List<CrewMember> crewMembers = new ArrayList<>();
-
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_ID)) {
             statement.setLong(1, crewId);
-
             ResultSet resultSet = statement.executeQuery();
+
+            List<CrewMember> crewMembers = new ArrayList<>();
             while (resultSet.next()) {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
+
+            return crewMembers;
         } catch (SQLException e) {
             throw new SQLOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, crewId), e);
         }
-        return crewMembers;
     }
 
     @Override
     public List<CrewMember> getListOfCrewMemberByCrewName(String crewName) {
-        List<CrewMember> crewMembers = new ArrayList<>();
-
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
             statement.setString(1, crewName);
 
             ResultSet resultSet = statement.executeQuery();
+
+            List<CrewMember> crewMembers = new ArrayList<>();
+
             while (resultSet.next()) {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
+
+            return crewMembers;
         } catch (SQLException e) {
             throw new SQLOperationException(
                     String.format("%1s with crew name: %2s", CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, crewName), e);
         }
-        return crewMembers;
     }
 
     @Override

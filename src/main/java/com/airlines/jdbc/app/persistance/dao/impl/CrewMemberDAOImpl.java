@@ -9,8 +9,8 @@ import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.exception.SQLOperationException;
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship;
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

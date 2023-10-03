@@ -1,8 +1,5 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship;
-import com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;

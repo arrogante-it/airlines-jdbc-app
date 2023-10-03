@@ -2,8 +2,8 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
-import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberCitizenship.UK;
-import static com.airlines.jdbc.app.persistance.entities.enamFields.CrewMemberPosition.CAP;
+import static com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship.UK;
+import static com.airlines.jdbc.app.persistance.entities.CrewMemberPosition.CAP;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
