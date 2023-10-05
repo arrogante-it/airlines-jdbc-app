@@ -52,9 +52,10 @@ public class AirplaneDaoTest {
 
     @Test
     public void shouldCorrectlySaveAirplane() {
-        // by Accessors
-        Crew crew = new Crew()
-                .setName("Crew A");
+        // by Setter
+        Crew crew = new Crew();
+        // crew.setId(1L); // ???
+        crew.setName("Crew A");
         // by Builder
         Airplane airplane = new Airplane.Builder()
                 .codeName("ABC123")

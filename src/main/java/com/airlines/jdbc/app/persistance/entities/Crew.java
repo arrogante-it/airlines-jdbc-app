@@ -19,20 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
-@Table(name = "crew")
 @Accessors(chain = true)
-@Getter
-@Setter
 public class Crew {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, name = "name")
     private String name;
 
-    @OneToMany(mappedBy = "airplane")
+    @OneToMany(mappedBy = "crew")
     List<Airplane> airplanes = new ArrayList<Airplane>();
 
     @ManyToMany()
@@ -57,5 +50,47 @@ public class Crew {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, airplanes, crewMembers);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Airplane> getAirplanes() {
+        return airplanes;
+    }
+
+    public void setAirplanes(List<Airplane> airplanes) {
+        this.airplanes = airplanes;
+    }
+
+    public List<CrewMember> getCrewMembers() {
+        return crewMembers;
+    }
+
+    public void setCrewMembers(List<CrewMember> crewMembers) {
+        this.crewMembers = crewMembers;
+    }
+
+    @Override
+    public String toString() {
+        return "Crew{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", airplanes=" + airplanes +
+                ", crewMembers=" + crewMembers +
+                '}';
     }
 }

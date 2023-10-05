@@ -40,13 +40,14 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     @Override
     public void saveAirplane(Airplane airplane) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, airplane.getCodeName());
             statement.setString(2, airplane.getModel().getName());
             statement.setDate(3, Date.valueOf(airplane.getManufactureDate()));
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
+            statement.setString(6, String.valueOf(airplane.getCrew()));
             statement.executeUpdate();
 
             Long id = fetchGeneratedId(statement);
@@ -154,6 +155,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
                 .manufactureDate(LocalDate.parse(resultSet.getString("manufacture_date")))
                 .capacity(resultSet.getInt("capacity"))
                 .flightRange(resultSet.getInt("flight_range"))
+                .crew((Crew) resultSet.getObject("crew"))
                 .build();
     }
 }

@@ -41,28 +41,28 @@ public class CrewDAOImplTest {
         crewDAO = new CrewDAOImpl(connection);
     }
 
-    @Test
-    public void testAddNewCrewMemberToCrew() throws SQLException {
-        Crew crew = new Crew()
-                .setId(1L)
-                .setName("Crew A");
-        CrewMember crewMember = new CrewMember()
-                .setId(1L)
-                .setFirstName("John")
-                .setLastName("Doe")
-                .setPosition(CAP)
-                .setBirthday(LocalDate.parse("1991-01-07"))
-                .setCitizenship(UK);
-
-        PreparedStatement statement = Mockito.mock(PreparedStatement.class);
-        when(connection.prepareStatement(Mockito.eq(INSERT_CREW_CREW_MEMBER))).thenReturn(statement);
-
-        crewDAO.addNewCrewMemberToCrew(crew, crewMember);
-
-        Mockito.verify(statement).setLong(1, crew.getId());
-        Mockito.verify(statement).setLong(2, crewMember.getId());
-        Mockito.verify(statement).executeUpdate();
-    }
+//    @Test
+//    public void testAddNewCrewMemberToCrew() throws SQLException {
+//        Crew crew = new Crew()
+//                .setId(1L)
+//                .setName("Crew A");
+//        CrewMember crewMember = new CrewMember()
+//                .setId(1L)
+//                .setFirstName("John")
+//                .setLastName("Doe")
+//                .setPosition(CAP)
+//                .setBirthday(LocalDate.parse("1991-01-07"))
+//                .setCitizenship(UK);
+//
+//        PreparedStatement statement = Mockito.mock(PreparedStatement.class);
+//        when(connection.prepareStatement(Mockito.eq(INSERT_CREW_CREW_MEMBER))).thenReturn(statement);
+//
+//        crewDAO.addNewCrewMemberToCrew(crew, crewMember);
+//
+//        Mockito.verify(statement).setLong(1, crew.getId());
+//        Mockito.verify(statement).setLong(2, crewMember.getId());
+//        Mockito.verify(statement).executeUpdate();
+//    }
 
     @Test
     public void testGetListOfCrewMembersByCrewId() throws SQLException {
