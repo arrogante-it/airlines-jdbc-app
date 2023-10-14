@@ -46,6 +46,21 @@ public class AirplaneDaoTest {
                     "    flight_range int not null,\n" +
                     "    crew_id bigint,\n" +
                     "    foreign key (crew_id) references crew(id)\n" +
+                    ");" +
+                    "create table crew_member (\n" +
+                    "    id bigint auto_increment primary key,\n" +
+                    "    first_name varchar(15) not null,\n" +
+                    "    last_name varchar(25) not null,\n" +
+                    "    position varchar(255) not null,\n" +
+                    "    birthday varchar(10) not null,\n" +
+                    "    citizenship varchar(50) not null\n" +
+                    ");" +
+                    "create table crew_crew_member (\n" +
+                    "    crew_id bigint,\n" +
+                    "    crew_member_id bigint,\n" +
+                    "    primary key (crew_id, crew_member_id),\n" +
+                    "    foreign key (crew_id) references crew(id),\n" +
+                    "    foreign key (crew_member_id) references crew_member(id)\n" +
                     ");");
         }
     }

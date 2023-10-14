@@ -25,15 +25,6 @@ public class Crew {
 
     private String name;
 
-    @OneToMany(mappedBy = "crew")
-    List<Airplane> airplanes = new ArrayList<Airplane>();
-
-    @ManyToMany()
-    @JoinTable(
-            name = "crew_crew_member",
-            joinColumns = @JoinColumn(name = "crew_id"),
-            inverseJoinColumns = @JoinColumn(name = "crew_member_id")
-    )
     List<CrewMember> crewMembers = new ArrayList<CrewMember>();
 
     @Override
@@ -43,13 +34,12 @@ public class Crew {
         Crew crew = (Crew) o;
         return id.equals(crew.id) &&
                 name.equals(crew.name) &&
-                airplanes.equals(crew.airplanes) &&
                 crewMembers.equals(crew.crewMembers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, airplanes, crewMembers);
+        return Objects.hash(id, name, crewMembers);
     }
 
     public Long getId() {
@@ -68,14 +58,6 @@ public class Crew {
         this.name = name;
     }
 
-    public List<Airplane> getAirplanes() {
-        return airplanes;
-    }
-
-    public void setAirplanes(List<Airplane> airplanes) {
-        this.airplanes = airplanes;
-    }
-
     public List<CrewMember> getCrewMembers() {
         return crewMembers;
     }
@@ -89,7 +71,6 @@ public class Crew {
         return "Crew{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", airplanes=" + airplanes +
                 ", crewMembers=" + crewMembers +
                 '}';
     }

@@ -1,9 +1,14 @@
-create table crew (
+drop table if exists airlines_db.crew_crew_member;
+drop table if exists airlines_db.crew_member;
+drop table if exists airlines_db.airplane;
+drop table if exists airlines_db.crew;
+
+create table airlines_db.crew (
     id bigint auto_increment primary key,
     name varchar(30) not null
 );
 
-create table airplane (
+create table airlines_db.airplane (
     id bigint auto_increment primary key,
     code_name varchar(10) not null,
     model varchar(40) not null,
@@ -14,7 +19,7 @@ create table airplane (
     foreign key (crew_id) references crew(id)
 );
 
-create table if not exists crewmember (
+create table airlines_db.crew_member (
     id bigint auto_increment primary key,
     first_name varchar(15) not null,
     last_name varchar(25) not null,
@@ -23,10 +28,10 @@ create table if not exists crewmember (
     citizenship varchar(50) not null
 );
 
-create table if not exists crew_crew_member (
+create table airlines_db.crew_crew_member (
     crew_id bigint,
     crew_member_id bigint,
     primary key (crew_id, crew_member_id),
     foreign key (crew_id) references crew(id),
-    foreign key (crew_member_id) references crewmember(id)
+    foreign key (crew_member_id) references crew_member(id)
 );

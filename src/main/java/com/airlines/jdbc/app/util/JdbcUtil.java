@@ -4,6 +4,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import javax.sql.DataSource;
 import java.util.Map;
 
+// to test
 public class JdbcUtil {
     static String DEFAULT_DATABASE_NAME = "test_airlines_db";
     static String DEFAULT_USERNAME = "airlineuser";

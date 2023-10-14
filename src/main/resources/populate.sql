@@ -4,5 +4,5 @@ values ('ABC123', 'Boeing 777', '2000-03-03', 300, 7000);
 insert into crew (name)
 values ('John Doe');
 
-insert into crewmember (first_name, last_name, position, birthday, citizenship)
+insert into crew_member (first_name, last_name, position, birthday, citizenship)
 values ('John', 'Doe', 'Captain', '1985-05-10', 'UK');

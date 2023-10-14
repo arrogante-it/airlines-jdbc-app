@@ -5,7 +5,9 @@ import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_AIRPLANE_
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_AIRPLANE_BY_NAME;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_ALL_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.CrewConstants.SELECT_CREW_MEMBERS_BY_ID;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
@@ -17,6 +19,10 @@ import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.exception.SQLOperationException;
 import com.airlines.jdbc.app.persistance.entities.AirplaneModel;
 import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.persistance.entities.CrewMember;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
+import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
+import static java.util.Optional.ofNullable;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -42,12 +48,16 @@ public class AirplaneDAOImpl implements AirplaneDAO {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_AIRPLANE_SQL, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
+            Long crewId = ofNullable(airplane.getCrew())
+                    .map(Crew::getId).orElse(null);
+
             statement.setString(1, airplane.getCodeName());
             statement.setString(2, airplane.getModel().getName());
             statement.setDate(3, Date.valueOf(airplane.getManufactureDate()));
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
-            statement.setString(6, String.valueOf(airplane.getCrew()));
+            //statement.setString(6, airplane.getCrew().getName()); .
+            statement.setObject(6, crewId); // ?
             statement.executeUpdate();
 
             Long id = fetchGeneratedId(statement);
@@ -148,6 +158,9 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     }
 
     private Airplane extractAirplaneFromResultSet(ResultSet resultSet) throws SQLException {
+        Long crewId = resultSet.getLong("crew_id");
+        Crew crew = getCrewById(crewId);
+
         return new Airplane.Builder()
                 .id(resultSet.getLong("id"))
                 .codeName(resultSet.getString("code_name"))
@@ -155,7 +168,37 @@ public class AirplaneDAOImpl implements AirplaneDAO {
                 .manufactureDate(LocalDate.parse(resultSet.getString("manufacture_date")))
                 .capacity(resultSet.getInt("capacity"))
                 .flightRange(resultSet.getInt("flight_range"))
-                .crew((Crew) resultSet.getObject("crew"))
+                .crew(crew)
                 .build();
+    }
+
+    private Crew getCrewById(Long crewId) {
+        // if crew_id == null...
+//        return null;
+
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_ID)) {
+            statement.setLong(1, crewId);
+            ResultSet resultSet = statement.executeQuery();
+
+            Crew crew = null;
+
+            while (resultSet.next()) {
+                crew = extractCrewMemberFromResultSet(resultSet);
+            }
+
+            return crew;
+        } catch (SQLException e) {
+            throw new SQLOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, crewId), e);
+        }
+    }
+
+    private Crew extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
+        Crew crew = new Crew();
+        crew.setId(resultSet.getLong("id"));
+        crew.setName(resultSet.getString("name"));
+
+        return crew;
     }
 }

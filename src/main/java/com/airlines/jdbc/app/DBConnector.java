@@ -1,6 +1,9 @@
 package com.airlines.jdbc.app;
 
+import java.sql.Connection;
+
 public class DBConnector {
-    // todo work with DB
-    // getConnection();
+    public Connection getConnection() {
+        return null;
+    }
 }
