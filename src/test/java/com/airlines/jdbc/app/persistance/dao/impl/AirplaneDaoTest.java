@@ -35,7 +35,7 @@ public class AirplaneDaoTest {
             Statement createTableStatement = connection.createStatement();
             createTableStatement.execute("create table crew (\n" +
                     "    id bigint auto_increment primary key,\n" +
-                    "    name varchar(30) not null\n" +
+                    "    crew_name varchar(30) not null\n" +
                     "); " +
                     "create table airplane (\n" +
                     "    id bigint auto_increment primary key,\n" +

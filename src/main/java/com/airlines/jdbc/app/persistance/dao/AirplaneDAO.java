@@ -8,13 +8,13 @@ import java.util.List;
 public interface AirplaneDAO {
     void saveAirplane(Airplane airplane);
 
-    void deleteAirplane(Airplane airplane);
-
-    void updateAirplaneWithCrew(Airplane airplane, Crew crew);
-
     Airplane findAirplaneByCode(String codeName);
 
     List<Airplane> findAllAirplanes();
 
+    void deleteAirplane(Airplane airplane);
+
     List<Airplane> searchAirplanesByCrewName(String crewName);
+
+    void updateAirplaneWithCrew(Airplane airplane, Crew crew);
 }

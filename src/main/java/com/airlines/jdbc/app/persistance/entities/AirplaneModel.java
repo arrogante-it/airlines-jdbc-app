@@ -1,10 +1,5 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
-@Getter
 public enum AirplaneModel {
     BOEING("Boeing 777"),
     AIRBUS("Airbus A350"),
@@ -14,6 +9,10 @@ public enum AirplaneModel {
 
     private final String name;
 
+    AirplaneModel(String name) {
+        this.name = name;
+    }
+
     public static AirplaneModel fromString(String text) {
         for (AirplaneModel model : AirplaneModel.values()) {
             if (model.name.equalsIgnoreCase(text)) {
@@ -21,5 +20,9 @@ public enum AirplaneModel {
             }
         }
         throw new IllegalArgumentException("No constant with name " + text + " found in AirplaneModel enum.");
+    }
+
+    public String getName() {
+        return name;
     }
 }

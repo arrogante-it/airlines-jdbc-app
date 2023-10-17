@@ -62,12 +62,11 @@ public class CrewDAOImpl implements CrewDAO {
     @Override
     public List<CrewMember> getListOfCrewMemberByCrewName(String crewName) {
         try (PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
-            statement.setString(1, crewName);
 
+            statement.setString(1, crewName);
             ResultSet resultSet = statement.executeQuery();
 
             List<CrewMember> crewMembers = new ArrayList<>();
-
             while (resultSet.next()) {
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }

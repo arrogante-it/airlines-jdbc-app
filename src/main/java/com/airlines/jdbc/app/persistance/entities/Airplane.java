@@ -5,17 +5,11 @@ import java.util.Objects;
 
 public class Airplane {
     private Long id;
-
     private String codeName;
-
     private AirplaneModel model;
-
     private LocalDate manufactureDate;
-
     private int capacity;
-
     private int flightRange;
-
     private Crew crew;
 
     private Airplane(Builder builder) {

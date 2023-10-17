@@ -1,5 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
+import com.airlines.jdbc.app.DBConnector;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.DELETE_AIRPLANE;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_AIRPLANE_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_AIRPLANE_BY_NAME;
@@ -7,7 +8,6 @@ import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_ALL_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE;
-import static com.airlines.jdbc.app.constants.CrewConstants.SELECT_CREW_MEMBERS_BY_ID;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
@@ -19,9 +19,6 @@ import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.exception.SQLOperationException;
 import com.airlines.jdbc.app.persistance.entities.AirplaneModel;
 import com.airlines.jdbc.app.persistance.entities.Crew;
-import com.airlines.jdbc.app.persistance.entities.CrewMember;
-import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
-import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
 import static java.util.Optional.ofNullable;
 
 import javax.sql.DataSource;
@@ -36,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirplaneDAOImpl implements AirplaneDAO {
-
     private DataSource dataSource;
 
     public AirplaneDAOImpl(DataSource dataSource) {
@@ -56,8 +52,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
             statement.setDate(3, Date.valueOf(airplane.getManufactureDate()));
             statement.setInt(4, airplane.getCapacity());
             statement.setInt(5, airplane.getFlightRange());
-            //statement.setString(6, airplane.getCrew().getName()); .
-            statement.setObject(6, crewId); // ?
+            statement.setObject(6, crewId);
             statement.executeUpdate();
 
             Long id = fetchGeneratedId(statement);
@@ -68,20 +63,11 @@ public class AirplaneDAOImpl implements AirplaneDAO {
         }
     }
 
-    private Long fetchGeneratedId(PreparedStatement insertStatement) throws SQLException {
-        ResultSet generatedKeys = insertStatement.getGeneratedKeys();
-
-        if (generatedKeys.next()) {
-            return generatedKeys.getLong(1);
-        } else {
-            throw new SQLOperationException("Can not obtain an account ID");
-        }
-    }
-
     @Override
     public Airplane findAirplaneByCode(String codeName) {
-        try (Connection connection = dataSource.getConnection();
+        try (Connection connection = DBConnector.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_BY_CODENAME_SQL)) {
+
             statement.setString(1, codeName);
 
             ResultSet resultSet = statement.executeQuery();
@@ -157,6 +143,16 @@ public class AirplaneDAOImpl implements AirplaneDAO {
         }
     }
 
+    private Long fetchGeneratedId(PreparedStatement insertStatement) throws SQLException {
+        ResultSet generatedKeys = insertStatement.getGeneratedKeys();
+
+        if (generatedKeys.next()) {
+            return generatedKeys.getLong(1);
+        } else {
+            throw new SQLOperationException("Can not obtain an account ID");
+        }
+    }
+
     private Airplane extractAirplaneFromResultSet(ResultSet resultSet) throws SQLException {
         Long crewId = resultSet.getLong("crew_id");
         Crew crew = getCrewById(crewId);
@@ -173,16 +169,13 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     }
 
     private Crew getCrewById(Long crewId) {
-        // if crew_id == null...
-//        return null;
-
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(SELECT_CREW_BY_ID)) {
+
             statement.setLong(1, crewId);
             ResultSet resultSet = statement.executeQuery();
 
             Crew crew = null;
-
             while (resultSet.next()) {
                 crew = extractCrewMemberFromResultSet(resultSet);
             }
@@ -197,7 +190,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     private Crew extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
         Crew crew = new Crew();
         crew.setId(resultSet.getLong("id"));
-        crew.setName(resultSet.getString("name"));
+        crew.setName(resultSet.getString("crew_name"));
 
         return crew;
     }

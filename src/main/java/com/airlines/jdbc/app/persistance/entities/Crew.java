@@ -1,20 +1,7 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,10 +9,8 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class Crew {
     private Long id;
-
     private String name;
-
-    List<CrewMember> crewMembers = new ArrayList<CrewMember>();
+    private List<CrewMember> crewMembers = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
@@ -40,6 +25,15 @@ public class Crew {
     @Override
     public int hashCode() {
         return Objects.hash(id, name, crewMembers);
+    }
+
+    @Override
+    public String toString() {
+        return "Crew{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", crewMembers=" + crewMembers +
+                '}';
     }
 
     public Long getId() {
@@ -64,14 +58,5 @@ public class Crew {
 
     public void setCrewMembers(List<CrewMember> crewMembers) {
         this.crewMembers = crewMembers;
-    }
-
-    @Override
-    public String toString() {
-        return "Crew{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", crewMembers=" + crewMembers +
-                '}';
     }
 }
