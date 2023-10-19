@@ -10,9 +10,10 @@ public class AirlinesConstants {
     public static final String DELETE_AIRPLANE =
             "delete from airplane where id = ?";
     public static final String SELECT_AIRPLANE_BY_NAME =
-            "select * from airplane where crew_id in (select id from crew where crew_name = ?)";
+            "select * from airplane where crew_id in (select id from crew where name = ?)";
     public static final String UPDATE_AIRPLANE =
             "update airplane set crew_id = ? where id = ?";
+
     public static final String SELECT_CREW_BY_ID = "select * from crew as c\n" +
             "left join crew_crew_member as ccm\n" +
             "on c.id = ccm.crew_id\n" +
@@ -26,7 +27,7 @@ public class AirlinesConstants {
             "select cm.* from crew_member cm join crew_crew_member cc on cm.id = cc.crew_member_id where cc.crew_id = ?";
     public static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =
             "select cm.* from crew_member cm join crew_crew_member cc on cm.id = cc.crew_member_id " +
-                    "join crew c on cc.crew_id = c.id where c.crew_name = ?";
+                    "join crew c on cc.crew_id = c.id where c.name = ?";
     public static final String INSERT_CREW_CREW_MEMBER_TO_CREW =
             "insert into crew_crew_member (crew_id_foreign, crew_member_id_foreign) values (?, ?)";
 

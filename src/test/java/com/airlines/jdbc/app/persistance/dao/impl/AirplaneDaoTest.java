@@ -1,10 +1,14 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
+import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW;
+import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_CREW_MEMBER;
+import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_MEMBER;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.BOEING;
-import com.airlines.jdbc.app.util.JdbcUtil;
+import com.airlines.jdbc.app.jdbcUtil.JdbcUtil;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,55 +37,30 @@ public class AirplaneDaoTest {
     private static void createAccountTable(DataSource dataSource) throws SQLException {
         try (Connection connection = dataSource.getConnection()) {
             Statement createTableStatement = connection.createStatement();
-            createTableStatement.execute("create table crew (\n" +
-                    "    id bigint auto_increment primary key,\n" +
-                    "    crew_name varchar(30) not null\n" +
-                    "); " +
-                    "create table airplane (\n" +
-                    "    id bigint auto_increment primary key,\n" +
-                    "    code_name varchar(10) not null,\n" +
-                    "    model varchar(40) not null,\n" +
-                    "    manufacture_date varchar(10) not null,\n" +
-                    "    capacity int not null,\n" +
-                    "    flight_range int not null,\n" +
-                    "    crew_id bigint,\n" +
-                    "    foreign key (crew_id) references crew(id)\n" +
-                    ");" +
-                    "create table crew_member (\n" +
-                    "    id bigint auto_increment primary key,\n" +
-                    "    first_name varchar(15) not null,\n" +
-                    "    last_name varchar(25) not null,\n" +
-                    "    position varchar(255) not null,\n" +
-                    "    birthday varchar(10) not null,\n" +
-                    "    citizenship varchar(50) not null\n" +
-                    ");" +
-                    "create table crew_crew_member (\n" +
-                    "    crew_id bigint,\n" +
-                    "    crew_member_id bigint,\n" +
-                    "    primary key (crew_id, crew_member_id),\n" +
-                    "    foreign key (crew_id) references crew(id),\n" +
-                    "    foreign key (crew_member_id) references crew_member(id)\n" +
-                    ");");
+            createTableStatement.execute(CREATE_CREW
+                    + CREATE_AIRPLANE
+                    + CREATE_CREW_MEMBER
+                    + CREATE_CREW_CREW_MEMBER + "insert into crew (crew_name) values ('Fight Club')"
+            );
         }
     }
 
     @Test
     public void shouldCorrectlySaveAirplane() {
-        // by Setter
         Crew crew = new Crew();
-        // crew.setId(1L); // ???
-        crew.setName("Crew A");
-        // by Builder
+        crew.setId(1L);
+        crew.setName("Fight Club");
+
         Airplane airplane = new Airplane.Builder()
-                .codeName("ABC123")
+                .codeName("RTE543")
                 .model(BOEING)
                 .manufactureDate(DATE)
-                .capacity(300)
-                .flightRange(7000)
+                .capacity(450)
+                .flightRange(3000)
                 .crew(crew)
                 .build();
 
-        int airplanesCountBeforeInsert = airplaneDAO.findAllAirplanes().size(); // 0
+        int airplanesCountBeforeInsert = airplaneDAO.findAllAirplanes().size();
         airplaneDAO.saveAirplane(airplane);
         List<Airplane> airplanes = airplaneDAO.findAllAirplanes();
 

@@ -5,7 +5,7 @@ drop table if exists airlines_db.crew;
 
 create table airlines_db.crew (
     id bigint auto_increment primary key,
-    name varchar(30) not null
+    crew_name varchar(30) not null
 );
 
 create table airlines_db.airplane (

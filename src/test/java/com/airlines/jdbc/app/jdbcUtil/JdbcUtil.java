@@ -1,10 +1,9 @@
-package com.airlines.jdbc.app.util;
+package com.airlines.jdbc.app.jdbcUtil;
 
 import org.h2.jdbcx.JdbcDataSource;
-import javax.sql.DataSource;
-import java.util.Map;
 
-// to test
+import javax.sql.DataSource;
+
 public class JdbcUtil {
     static String DEFAULT_DATABASE_NAME = "test_airlines_db";
     static String DEFAULT_USERNAME = "airlineuser";
@@ -26,12 +25,5 @@ public class JdbcUtil {
 
     private static String formatH2InMemoryDbUrl(String databaseName) {
         return String.format("jdbc:h2:mem:%s;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=false;DATABASE_TO_UPPER=false;", databaseName);
-    }
-
-    public static Map<String, String> getInMemoryDbPropertiesMap() {
-        return Map.of(
-                "url", String.format("jdbc:h2:mem:%s", DEFAULT_DATABASE_NAME),
-                "username", DEFAULT_USERNAME,
-                "password", DEFAULT_PASSWORD);
     }
 }

@@ -36,33 +36,33 @@ public class DBConnector {
         return dataSource;
     }
 
-    public static Connection getConnectionTEST() {
-        try {
-            String url = formatMySqlDbUrl();
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            return createDefaultDataSource().getConnection();
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new SQLOperationException(e);
-        }
-    }
-
+//    public static Connection getConnectionTEST() {
+//        try {
+//            String url = formatMySqlDbUrl();
+//            Class.forName("com.mysql.cj.jdbc.Driver");
+//            return createDefaultDataSource().getConnection();
+//        } catch (SQLException | ClassNotFoundException e) {
+//            throw new SQLOperationException(e);
+//        }
+//    }
+//
     private static String formatMySqlDbUrl() {
         return String.format(CONNECTION_URL, DBConnector.DEFAULT_DATABASE_NAME);
     }
-
-    public static DataSource createDefaultDataSource() {
-        String url = formatTESTDbUrl(DEFAULT_DATABASE_NAME);
-        return createDataSource(url, USERNAME, PASS);
-    }
-
-    public static DataSource createDataSource(String url, String username, String password) {
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUser(username);
-       dataSource.setPassword(password);
-        dataSource.setUrl(url);
-
-        return dataSource;
-    }
+//
+//    public static DataSource createDefaultDataSource() {
+//        String url = formatTESTDbUrl(DEFAULT_DATABASE_NAME);
+//        return createDataSource(url, USERNAME, PASS);
+//    }
+//
+//    public static DataSource createDataSource(String url, String username, String password) {
+//        MysqlDataSource dataSource = new MysqlDataSource();
+//        dataSource.setUser(username);
+//       dataSource.setPassword(password);
+//        dataSource.setUrl(url);
+//
+//        return dataSource;
+//    }
 
     private static String formatTESTDbUrl(String databaseName) {
         return String.format(CONNECTION_URL, databaseName);
