@@ -9,22 +9,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 
 public class AirplaneDAOImplTest {
-    private static final String INSERT_AIRPLANE_SQL =
-            "insert into airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
-    private static final String SELECT_BY_CODENAME_SQL =
-            "select * from airplane where codeName = ?";
-    private static final String SELECT_ALL_SQL =
-            "select * from airplane";
-    private static final String DELETE_AIRPLANE =
-            "delete from airplane where id = ?";
-    private static final String SELECT_AIRPLANE_BY_NAME =
-            "select * from airplane where crew_id in (select id from crew where name = ?)";
-    private static final String UPDATE_AIRPLANE =
-            "update airplane set crew_id = ? where id = ?";
-    private static final LocalDate DATE = LocalDate.parse("2023-09-12");
-
-    private AirplaneDAO airPlaneDAO;
-    private Connection connection;
+//    private static final String INSERT_AIRPLANE_SQL =
+//            "insert into airplane (code_name, model, manufacture_date, capacity, flight_range) values (?, ?, ?, ?, ?)";
+//    private static final String SELECT_BY_CODENAME_SQL =
+//            "select * from airplane where codeName = ?";
+//    private static final String SELECT_ALL_SQL =
+//            "select * from airplane";
+//    private static final String DELETE_AIRPLANE =
+//            "delete from airplane where id = ?";
+//    private static final String SELECT_AIRPLANE_BY_NAME =
+//            "select * from airplane where crew_id in (select id from crew where name = ?)";
+//    private static final String UPDATE_AIRPLANE =
+//            "update airplane set crew_id = ? where id = ?";
+//    private static final LocalDate DATE = LocalDate.parse("2023-09-12");
+//
+//    private AirplaneDAO airPlaneDAO;
+//    private Connection connection;
 
 //    @BeforeEach
 //    public void setUp() {
