@@ -8,7 +8,6 @@ import com.airlines.jdbc.app.persistance.entities.Crew;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
-import java.util.List;
 
 public class Application {
     private static DataSource dataSource;
@@ -17,25 +16,25 @@ public class Application {
         AirplaneDAO airplaneDao = new AirplaneDAOImpl(DBConnector.createBasicDataSource());
         System.out.println("successfully connected to DB\n");
 
-        Crew crew = new Crew();
-        crew.setId(101L);
-        crew.setName("qq211");
+//        Crew crew = new Crew();
+//        crew.setId(101L);
+//        crew.setName("qq211");
+//
+//        Airplane airplane  = new Airplane.Builder()
+//                .codeName("wwqweqw222")
+//                .model(AirplaneModel.MCDONNELL)
+//                .manufactureDate(LocalDate.now())
+//                .capacity(500)
+//                .flightRange(9000)
+//                .crew(crew)
+//                .build();
 
-        Airplane airplane  = new Airplane.Builder()
-                .codeName("wwqweqw222")
-                .model(AirplaneModel.MCDONNELL)
-                .manufactureDate(LocalDate.now())
-                .capacity(500)
-                .flightRange(9000)
-                .crew(crew)
-                .build();
-
-        airplaneDao.saveAirplane(airplane);
+       //airplaneDao.saveAirplane(airplane);
 
         // todo find
-        System.out.println("BY CODE NAME:\n" + airplaneDao.findAirplaneByCode("QWE321") + "\n");
-        // todo find
-        System.out.println("BY CREW NAME:\n" + airplaneDao.searchAirplanesByCrewName("Black Tigers") + "\n");
+      //  System.out.println("BY CODE NAME:\n" + airplaneDao.findAirplaneByCode("CNM505") + "\n");
+//        // todo find
+//        System.out.println("BY CREW NAME:\n" + airplaneDao.searchAirplanesByCrewName("Black Tigers") + "\n");
 //
 //        // todo BEFORE UPDATE
 //        // todo find all
@@ -45,25 +44,34 @@ public class Application {
 //        System.out.println("\n");
 //
 //        // todo update
-//        Crew crew = new Crew();
-//        crew.setId(1L);
-//        crew.setName("Fight Club");
-//        Airplane airplane = new Airplane.Builder()
-//                .id(1L)
-//                .codeName("ZXC322")
-//                .model(AirplaneModel.BOMBARDIER)
-//                .manufactureDate(LocalDate.now())
-//                .capacity(700)
-//                .flightRange(7000)
-//                .crew(crew)
-//                .build();
-//        airplaneDao.updateAirplaneWithCrew(airplane, crew);
+        Crew crew = new Crew();
+        crew.setId(10L);
+        crew.setName("Walter White");
+
+        Airplane airplane = new Airplane.Builder()
+                .id(6L)
+                .codeName("ZXC322")
+                .model(AirplaneModel.BOMBARDIER)
+                .manufactureDate(LocalDate.now())
+                .capacity(999)
+                .flightRange(7000)
+                .crew(crew)
+                .build();
+
+     //
+
+//        airplaneDao.updateCrewInAirplane(airplane, crew);
+
+
+
+//        Airplane airplaneTEST = new Airplane.Builder().id(10L).build();
+//        airplaneDao.deleteAirplane(airplaneTEST);
 //
-        // todo AFTER UPDATE
-        // todo find all
-        List<Airplane> airplanesAfter = airplaneDao.findAllAirplanes();
-        System.out.print("ALL after update:\n");
-        airplanesAfter.forEach(System.out::println);
+//        // todo AFTER UPDATE
+//        // todo find all
+//        List<Airplane> airplanesAfter = airplaneDao.findAllAirplanes();
+//        System.out.print("ALL after update:\n");
+//        airplanesAfter.forEach(System.out::println);
     }
 
     public static Airplane getAirplaneInstance() {

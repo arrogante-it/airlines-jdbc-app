@@ -11,8 +11,17 @@ public class AirlinesConstants {
             "delete from airplane where id = ?";
     public static final String SELECT_AIRPLANE_BY_NAME =
             "select * from airplane where crew_id in (select id from crew where crew_name = ?)";
-    public static final String UPDATE_AIRPLANE =
+    public static final String UPDATE_CREW_IN_AIRPLANE =
             "update airplane set crew_id = ? where id = ?";
+    public static final String UPDATE_AIRPLANE_AND_CREW =
+            "update airplane\n" +
+                    "set code_name = ?," +
+                    "model = ?,\n" +
+                    "manufacture_date = ?,\n" +
+                    "capacity = ?,\n" +
+                    "flight_range = ?,\n" +
+                    "crew_id = ?\n" +
+                    "WHERE id = ?";
 
     public static final String SELECT_CREW_BY_ID = "select * from crew as c\n" +
             "left join crew_crew_member as ccm\n" +

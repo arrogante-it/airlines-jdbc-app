@@ -7,13 +7,15 @@ import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_AIRPLANE_
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_ALL_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_CREW_BY_ID;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE_AND_CREW;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_CREW_IN_AIRPLANE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
 
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.exception.SQLOperationException;
@@ -65,7 +67,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
 
     @Override
     public Airplane findAirplaneByCode(String codeName) {
-        try (Connection connection = DBConnector.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_BY_CODENAME_SQL)) {
 
             statement.setString(1, codeName);
@@ -131,15 +133,20 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     }
 
     @Override
-    public void updateAirplaneWithCrew(Airplane airplane, Crew crew) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(UPDATE_AIRPLANE)) {
+    public void updateAirplaneAndSetCrewId(Airplane airplane, Crew crew) {
+        try (Connection connection = dataSource.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(UPDATE_AIRPLANE_AND_CREW);
 
-            statement.setLong(1, crew.getId());
-            statement.setLong(2, airplane.getId());
+            statement.setString(1, airplane.getCodeName());
+            statement.setString(2, airplane.getModel().getName());
+            statement.setDate(3, Date.valueOf(airplane.getManufactureDate()));
+            statement.setInt(4, airplane.getCapacity());
+            statement.setInt(5, airplane.getFlightRange());
+            statement.setLong(6, crew.getId());
+            statement.setLong(7, airplane.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE, e);
+            throw new SQLOperationException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
         }
     }
 

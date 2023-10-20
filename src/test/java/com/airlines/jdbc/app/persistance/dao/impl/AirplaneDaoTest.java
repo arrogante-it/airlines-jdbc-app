@@ -7,6 +7,8 @@ import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_
 import com.airlines.jdbc.app.exception.SQLOperationException;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
+import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.AIRBUS;
+import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.BOMBARDIER;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.BOEING;
 import com.airlines.jdbc.app.jdbcUtil.JdbcUtil;
@@ -43,7 +45,8 @@ public class AirplaneDaoTest {
             createTableStatement.execute(CREATE_CREW
                     + CREATE_AIRPLANE
                     + CREATE_CREW_MEMBER
-                    + CREATE_CREW_CREW_MEMBER + "insert into crew (crew_name) values ('Fight Club')"
+                    + CREATE_CREW_CREW_MEMBER + "insert into crew (crew_name) values ('Fight Club');"
+                    + "insert into crew (crew_name) values ('Grey Crows');"
             );
         }
     }
@@ -81,8 +84,8 @@ public class AirplaneDaoTest {
     public void shouldCorrectlyFindAirplaneByCode() {
         String code = "RTE543";
         Airplane airplane = getAirplaneInstance(code, 1L, "Fight Club");
-
         airplaneDAO.saveAirplane(airplane);
+
         Airplane foundAirplane = airplaneDAO.findAirplaneByCode(code);
 
         assertNotNull(foundAirplane.getId());
@@ -102,7 +105,7 @@ public class AirplaneDaoTest {
     }
 
     @Test
-    public void shouldCorrectlyFindAirplaneByCrewName() {
+    public void shouldCorrectlyFindAirplanesByCrewName() {
         String crewName = "Fight Club";
         Airplane airplane = getAirplaneInstance("RTE543", 1L, crewName);
 
@@ -110,6 +113,7 @@ public class AirplaneDaoTest {
         airplaneDAO.saveAirplane(airplane);
         List<Airplane> airplanes = airplaneDAO.searchAirplanesByCrewName(crewName);
 
+        assertNotNull(airplanes.get(0).getId());
         assertEquals(airplanesCountBeforeInsert + 1, airplanes.size());
         assertTrue(airplanes.contains(airplane));
     }
@@ -118,16 +122,50 @@ public class AirplaneDaoTest {
     public void shouldCorrectlyDeleteAirplane() {
         String crewName = "Fight Club";
         Airplane airplane = getAirplaneInstance("RTE543", 1L, crewName);
-
         airplaneDAO.saveAirplane(airplane);
-        List<Airplane> airplanesBefore = airplaneDAO.findAllAirplanes(); // 1 or more
 
+        List<Airplane> airplanesBefore = airplaneDAO.findAllAirplanes();
         airplaneDAO.deleteAirplane(airplane);
-
         List<Airplane> airplanesAfter = airplaneDAO.findAllAirplanes();
 
         assertEquals(airplanesAfter.size(),  airplanesBefore.size() - 1);
         assertFalse(airplanesAfter.contains(airplane));
+    }
+
+    @Test
+    public void shouldCorrectlyUpdateAirplaneAndSetCrewId() {
+        Crew crew1 = new Crew();
+        crew1.setId(1L);
+        crew1.setName("Fight Club");
+        Airplane airplane1 = new Airplane.Builder()
+                .codeName("ZXC322")
+                .model(BOMBARDIER)
+                .manufactureDate(LocalDate.now())
+                .capacity(999)
+                .flightRange(7000)
+                .crew(crew1)
+                .build();
+        airplaneDAO.saveAirplane(airplane1);
+
+        Crew crew2 = new Crew();
+        crew2.setId(2L);
+        crew2.setName("Grey Crows");
+        Airplane expected = new Airplane.Builder()
+                .id(1L)
+                .codeName("QWE321")
+                .model(AIRBUS)
+                .manufactureDate(LocalDate.now())
+                .capacity(777)
+                .flightRange(9000)
+                .crew(crew2)
+                .build();
+        airplaneDAO.updateAirplaneAndSetCrewId(expected, crew2);
+
+        Airplane actual =  airplaneDAO.findAllAirplanes().iterator().next();
+
+        assertEquals(expected, actual);
+        assertEquals(airplaneDAO.findAllAirplanes().get(0).getCodeName(), expected.getCodeName());
+        assertEquals(airplaneDAO.findAllAirplanes().get(0).getCrew().getId(), crew2.getId());
     }
 
     private Airplane getAirplaneInstance(String codeName, Long crewId, String crewName) {
