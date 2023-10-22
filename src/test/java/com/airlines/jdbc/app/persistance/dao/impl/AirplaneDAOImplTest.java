@@ -1,10 +1,5 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
-
-import java.sql.Connection;
-import java.time.LocalDate;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
 

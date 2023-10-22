@@ -5,7 +5,7 @@ import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW;
 import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_CREW_MEMBER;
 import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_MEMBER;
 import com.airlines.jdbc.app.exception.SQLOperationException;
-import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
+import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.AIRBUS;
 import static com.airlines.jdbc.app.persistance.entities.AirplaneModel.BOMBARDIER;
@@ -30,13 +30,13 @@ import java.util.List;
 public class AirplaneDaoTest {
     private static final LocalDate DATE = LocalDate.parse("2023-09-12");
 
-    private static AirplaneDAO airplaneDAO;
+    private static AirplaneDao airplaneDAO;
 
     @BeforeEach
     public void setUp() throws SQLException {
         DataSource h2DataSource = JdbcUtil.createDefaultInMemoryH2DataSource();
         createAccountTable(h2DataSource);
-        airplaneDAO = new AirplaneDAOImpl(h2DataSource);
+        airplaneDAO = new AirplaneDaoImpl(h2DataSource);
     }
 
     private static void createAccountTable(DataSource dataSource) throws SQLException {
@@ -134,7 +134,7 @@ public class AirplaneDaoTest {
 
     @Test
     public void shouldCorrectlyUpdateAirplaneAndSetCrewId() {
-        Crew crew1 = new Crew();
+        Crew crew1 = new Crew.Builder().build();
         crew1.setId(1L);
         crew1.setName("Fight Club");
         Airplane airplane1 = new Airplane.Builder()
@@ -147,7 +147,7 @@ public class AirplaneDaoTest {
                 .build();
         airplaneDAO.saveAirplane(airplane1);
 
-        Crew crew2 = new Crew();
+        Crew crew2 = new Crew.Builder().build();
         crew2.setId(2L);
         crew2.setName("Grey Crows");
         Airplane expected = new Airplane.Builder()
@@ -169,7 +169,7 @@ public class AirplaneDaoTest {
     }
 
     private Airplane getAirplaneInstance(String codeName, Long crewId, String crewName) {
-        Crew crew = new Crew();
+        Crew crew = new Crew.Builder().build();
         crew.setId(crewId);
         crew.setName(crewName);
 

@@ -2,7 +2,8 @@ package com.airlines.jdbc.app.constants;
 
 public class AirlinesConstants {
     public static final String INSERT_AIRPLANE_SQL =
-            "insert into airplane (code_name, model, manufacture_date, capacity, flight_range, crew_id) values (?, ?, ?, ?, ?, ?)";
+            "insert into airplane (code_name, model, manufacture_date, capacity, flight_range, crew_id) " +
+                    "values (?, ?, ?, ?, ?, ?)";
     public static final String SELECT_BY_CODENAME_SQL =
             "select * from airplane where code_name = ?";
     public static final String SELECT_ALL_SQL =
@@ -22,7 +23,6 @@ public class AirlinesConstants {
                     "flight_range = ?,\n" +
                     "crew_id = ?\n" +
                     "WHERE id = ?";
-
     public static final String SELECT_CREW_BY_ID = "select * from crew as c\n" +
             "left join crew_crew_member as ccm\n" +
             "on c.id = ccm.crew_id\n" +
@@ -30,8 +30,8 @@ public class AirlinesConstants {
             "on cm.id = ccm.crew_member_id\n" +
             "where c.id = ?";
 
-//    public static final String INSERT_CREW_CREW_MEMBER =
-//            "insert into crew_crew_member (crew_id, crew_member_id) values (?, ?)";
+    public static final String INSERT_CREW_CREW_MEMBER =
+            "insert into crew_crew_member (crew_id, crew_member_id) values (?, ?)";
     public static final String SELECT_CREW_MEMBERS_BY_ID =
             "select cm.* from crew_member cm join crew_crew_member cc on cm.id = cc.crew_member_id where cc.crew_id = ?";
     public static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =

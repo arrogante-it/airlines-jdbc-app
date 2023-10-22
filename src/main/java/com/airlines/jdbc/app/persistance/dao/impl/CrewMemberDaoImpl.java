@@ -1,33 +1,36 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import static com.airlines.jdbc.app.constants.CrewMemberConstants.FIND_CREW_MEMBER_BY_ID;
-import static com.airlines.jdbc.app.constants.CrewMemberConstants.INSERT_CREW_MEMBER;
-import static com.airlines.jdbc.app.constants.CrewMemberConstants.UPDATE_CREW_MEMBER;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.FIND_CREW_MEMBER_BY_ID;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_CREW_MEMBER;
+import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_CREW_MEMBER;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
-import com.airlines.jdbc.app.persistance.dao.CrewMemberDAO;
+import com.airlines.jdbc.app.persistance.dao.CrewMemberDao;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.exception.SQLOperationException;
 import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
 import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 
-public class CrewMemberDAOImpl implements CrewMemberDAO {
-    private final Connection connection;
+public class CrewMemberDaoImpl implements CrewMemberDao {
+    private final DataSource dataSource;
 
-    public CrewMemberDAOImpl(Connection connection) {
-        this.connection = connection;
+    public CrewMemberDaoImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
     @Override
     public void saveCrewMember(CrewMember crewMember) {
-        try (PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
+
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
             statement.setObject(3, crewMember.getPosition());
@@ -41,7 +44,9 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
 
     @Override
     public void updateCrewMember(CrewMember crewMember) {
-        try (PreparedStatement statement = connection.prepareStatement(UPDATE_CREW_MEMBER)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(UPDATE_CREW_MEMBER)) {
+
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
             statement.setObject(3, crewMember.getPosition());
@@ -57,7 +62,9 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
 
     @Override
     public CrewMember findCrewMemberById(Long id) {
-        try (PreparedStatement statement = connection.prepareStatement(FIND_CREW_MEMBER_BY_ID)) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(FIND_CREW_MEMBER_BY_ID)) {
+
             statement.setLong(1, id);
             try (ResultSet resultSet = statement.executeQuery()) {
                 if (resultSet.next()) {
@@ -72,8 +79,7 @@ public class CrewMemberDAOImpl implements CrewMemberDAO {
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
-        CrewMember crewMember = new CrewMember();
-
+        CrewMember crewMember = new CrewMember.Builder().build();
         crewMember.setId(resultSet.getLong("id"));
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));

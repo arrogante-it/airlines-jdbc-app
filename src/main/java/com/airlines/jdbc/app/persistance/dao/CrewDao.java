@@ -5,7 +5,7 @@ import com.airlines.jdbc.app.persistance.entities.CrewMember;
 
 import java.util.List;
 
-public interface CrewDAO {
+public interface CrewDao {
     void addNewCrewMemberToCrew(Crew crew, CrewMember crewMember);
 
     void linkCrewMemberToCrew(Long crewMemberId, Long crewId);

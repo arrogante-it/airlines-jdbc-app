@@ -5,7 +5,7 @@ import com.airlines.jdbc.app.persistance.entities.Crew;
 
 import java.util.List;
 
-public interface AirplaneDAO {
+public interface AirplaneDao {
     void saveAirplane(Airplane airplane);
 
     Airplane findAirplaneByCode(String codeName);

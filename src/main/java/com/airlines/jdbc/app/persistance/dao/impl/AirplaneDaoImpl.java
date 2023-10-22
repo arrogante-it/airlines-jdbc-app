@@ -1,6 +1,5 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.DBConnector;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.DELETE_AIRPLANE;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_AIRPLANE_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_AIRPLANE_BY_NAME;
@@ -8,15 +7,12 @@ import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_ALL_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE_AND_CREW;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_CREW_IN_AIRPLANE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
-
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_BY_NAME_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
-import com.airlines.jdbc.app.persistance.dao.AirplaneDAO;
+import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.exception.SQLOperationException;
 import com.airlines.jdbc.app.persistance.entities.AirplaneModel;
@@ -34,10 +30,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AirplaneDAOImpl implements AirplaneDAO {
-    private DataSource dataSource;
+public class AirplaneDaoImpl implements AirplaneDao {
+    private final DataSource dataSource;
 
-    public AirplaneDAOImpl(DataSource dataSource) {
+    public AirplaneDaoImpl(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -195,7 +191,7 @@ public class AirplaneDAOImpl implements AirplaneDAO {
     }
 
     private Crew extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
-        Crew crew = new Crew();
+        Crew crew = new Crew.Builder().build();
         crew.setId(resultSet.getLong("id"));
         crew.setName(resultSet.getString("crew_name"));
 
