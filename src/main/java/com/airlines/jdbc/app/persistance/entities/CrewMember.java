@@ -8,9 +8,10 @@ public class CrewMember {
     private Long id;
     private String firstName;
     private String lastName;
-    private CrewMemberPosition position;
+    private Position position;
     private LocalDate birthday;
-    private CrewMemberCitizenship citizenship;
+    private Citizenship citizenship;
+
     private List<Crew> crews;
 
     private CrewMember(Builder builder) {
@@ -27,9 +28,9 @@ public class CrewMember {
         private Long id;
         private String firstName;
         private String lastName;
-        private CrewMemberPosition position;
+        private Position position;
         private LocalDate birthday;
-        private CrewMemberCitizenship citizenship;
+        private Citizenship citizenship;
         private List<Crew> crews;
 
         public Builder id(Long id) {
@@ -47,7 +48,7 @@ public class CrewMember {
             return this;
         }
 
-        public Builder position(CrewMemberPosition position) {
+        public Builder position(Position position) {
             this.position = position;
             return this;
         }
@@ -57,7 +58,7 @@ public class CrewMember {
             return this;
         }
 
-        public Builder citizenship(CrewMemberCitizenship citizenship) {
+        public Builder citizenship(Citizenship citizenship) {
             this.citizenship = citizenship;
             return this;
         }
@@ -128,11 +129,11 @@ public class CrewMember {
         this.lastName = lastName;
     }
 
-    public CrewMemberPosition getPosition() {
+    public Position getPosition() {
         return position;
     }
 
-    public void setPosition(CrewMemberPosition position) {
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -144,11 +145,11 @@ public class CrewMember {
         this.birthday = birthday;
     }
 
-    public CrewMemberCitizenship getCitizenship() {
+    public Citizenship getCitizenship() {
         return citizenship;
     }
 
-    public void setCitizenship(CrewMemberCitizenship citizenship) {
+    public void setCitizenship(Citizenship citizenship) {
         this.citizenship = citizenship;
     }
 

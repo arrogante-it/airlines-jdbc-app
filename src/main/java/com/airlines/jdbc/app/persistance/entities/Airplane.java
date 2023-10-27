@@ -6,7 +6,7 @@ import java.util.Objects;
 public class Airplane {
     private Long id;
     private String codeName;
-    private AirplaneModel model;
+    private Model model;
     private LocalDate manufactureDate;
     private int capacity;
     private int flightRange;
@@ -24,7 +24,7 @@ public class Airplane {
 
     public static class Builder {
         private Long id;
-        private AirplaneModel model;
+        private Model model;
         private String codeName;
         private LocalDate manufactureDate;
         private int capacity;
@@ -36,7 +36,7 @@ public class Airplane {
             return this;
         }
 
-        public Builder model(AirplaneModel model) {
+        public Builder model(Model model) {
             this.model = model;
             return this;
         }
@@ -119,11 +119,11 @@ public class Airplane {
         this.codeName = codeName;
     }
 
-    public AirplaneModel getModel() {
+    public Model getModel() {
         return model;
     }
 
-    public void setModel(AirplaneModel model) {
+    public void setModel(Model model) {
         this.model = model;
     }
 

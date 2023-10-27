@@ -1,22 +1,22 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import static com.airlines.jdbc.app.constants.AirlinesConstants.DELETE_AIRPLANE;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_AIRPLANE_SQL;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_AIRPLANE_BY_NAME;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_ALL_SQL;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.SELECT_CREW_BY_ID;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_AIRPLANE_AND_CREW;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.DELETE_AIRPLANE;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_AIRPLANE_SQL;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_AIRPLANE_BY_NAME;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_ALL_SQL;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_BY_ID;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.UPDATE_AIRPLANE_AND_CREW;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
-import com.airlines.jdbc.app.exception.SQLOperationException;
-import com.airlines.jdbc.app.persistance.entities.AirplaneModel;
 import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.persistance.entities.Model;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 import static java.util.Optional.ofNullable;
 
 import javax.sql.DataSource;
@@ -56,7 +56,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
             Long id = fetchGeneratedId(statement);
             airplane.setId(id);
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_INSERT_EXCEPTION_MESSAGE, airplane.getId()), e);
         }
     }
@@ -67,16 +67,18 @@ public class AirplaneDaoImpl implements AirplaneDao {
              PreparedStatement statement = connection.prepareStatement(SELECT_BY_CODENAME_SQL)) {
 
             statement.setString(1, codeName);
-
             ResultSet resultSet = statement.executeQuery();
+
+            Airplane result = null;
             if (resultSet.next()) {
-                return extractAirplaneFromResultSet(resultSet);
+                result = extractAirplaneFromResultSet(resultSet);
             }
+
+            return result;
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with code name = %2s", CAN_NOT_SELECT_EXCEPTION_MESSAGE, codeName), e);
         }
-        return null;
     }
 
     @Override
@@ -92,7 +94,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
             return airplanes;
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE, e);
+            throw new SqlOperationException(CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -104,7 +106,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
             statement.setLong(1, airplane.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_DELETE_EXCEPTION_MESSAGE, airplane.getId()), e);
         }
     }
@@ -124,7 +126,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
             return airplanes;
         } catch (SQLException e) {
-            throw new SQLOperationException(e);
+            throw new SqlOperationException(e);
         }
     }
 
@@ -142,7 +144,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
             statement.setLong(7, airplane.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_UPDATE_EXCEPTION_MESSAGE, e);
+            throw new SqlOperationException(String.format("%1s with id = %2d", CAN_NOT_UPDATE_EXCEPTION_MESSAGE, airplane.getId()), e);
         }
     }
 
@@ -152,7 +154,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
         if (generatedKeys.next()) {
             return generatedKeys.getLong(1);
         } else {
-            throw new SQLOperationException("Can not obtain an account ID");
+            throw new SqlOperationException("Can not obtain an account ID");
         }
     }
 
@@ -163,7 +165,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
         return new Airplane.Builder()
                 .id(resultSet.getLong("id"))
                 .codeName(resultSet.getString("code_name"))
-                .model(AirplaneModel.fromString(resultSet.getString("model")))
+                .model(Model.fromString(resultSet.getString("model")))
                 .manufactureDate(LocalDate.parse(resultSet.getString("manufacture_date")))
                 .capacity(resultSet.getInt("capacity"))
                 .flightRange(resultSet.getInt("flight_range"))
@@ -185,7 +187,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
 
             return crew;
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, crewId), e);
         }
     }

@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-public enum CrewMemberPosition {
+public enum Position {
     CAP("Captain"),
     SER("Sergeant"),
     WO("Warrant officer"),
@@ -9,12 +9,12 @@ public enum CrewMemberPosition {
 
     private final String name;
 
-    CrewMemberPosition(String name) {
+    Position(String name) {
         this.name = name;
     }
 
-    public static CrewMemberPosition fromString(String text) {
-        for (CrewMemberPosition position : CrewMemberPosition.values()) {
+    public static Position fromString(String text) {
+        for (Position position : Position.values()) {
             if (position.name.equalsIgnoreCase(text)) {
                 return position;
             }

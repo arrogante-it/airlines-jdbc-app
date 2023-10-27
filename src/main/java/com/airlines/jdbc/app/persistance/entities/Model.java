@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-public enum AirplaneModel {
+public enum Model {
     BOEING("Boeing 777"),
     AIRBUS("Airbus A350"),
     MCDONNELL("McDonnell Douglas MD-11"),
@@ -9,12 +9,12 @@ public enum AirplaneModel {
 
     private final String name;
 
-    AirplaneModel(String name) {
+    Model(String name) {
         this.name = name;
     }
 
-    public static AirplaneModel fromString(String text) {
-        for (AirplaneModel model : AirplaneModel.values()) {
+    public static Model fromString(String text) {
+        for (Model model : Model.values()) {
             if (model.name.equalsIgnoreCase(text)) {
                 return model;
             }

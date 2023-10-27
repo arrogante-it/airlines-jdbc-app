@@ -1,16 +1,16 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import static com.airlines.jdbc.app.constants.AirlinesConstants.FIND_CREW_MEMBER_BY_ID;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.INSERT_CREW_MEMBER;
-import static com.airlines.jdbc.app.constants.AirlinesConstants.UPDATE_CREW_MEMBER;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.exception.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.FIND_CREW_MEMBER_BY_ID;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_MEMBER;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.UPDATE_CREW_MEMBER;
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDao;
+import com.airlines.jdbc.app.persistance.entities.Citizenship;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
-import com.airlines.jdbc.app.exception.SQLOperationException;
-import com.airlines.jdbc.app.persistance.entities.CrewMemberCitizenship;
-import com.airlines.jdbc.app.persistance.entities.CrewMemberPosition;
+import com.airlines.jdbc.app.persistance.entities.Position;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -38,7 +38,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             statement.setObject(5, crewMember.getCitizenship());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
+            throw new SqlOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
         }
     }
 
@@ -55,7 +55,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_UPDATE_EXCEPTION_MESSAGE, crewMember.getId()), e);
         }
     }
@@ -72,7 +72,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
                 }
             }
         } catch (SQLException e) {
-            throw new SQLOperationException(
+            throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, id), e);
         }
         return null;
@@ -83,9 +83,9 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
         crewMember.setId(resultSet.getLong("id"));
         crewMember.setFirstName(resultSet.getString("first_name"));
         crewMember.setLastName(resultSet.getString("last_name"));
-        crewMember.setPosition((CrewMemberPosition) resultSet.getObject("position"));
+        crewMember.setPosition((Position) resultSet.getObject("position"));
         crewMember.setBirthday((LocalDate) resultSet.getObject("birthday"));
-        crewMember.setCitizenship((CrewMemberCitizenship) resultSet.getObject("citizenship"));
+        crewMember.setCitizenship((Citizenship) resultSet.getObject("citizenship"));
 
         return crewMember;
     }

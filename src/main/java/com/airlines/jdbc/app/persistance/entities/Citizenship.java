@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.entities;
 
-public enum CrewMemberCitizenship {
+public enum Citizenship {
     UK("United Kingdom"),
     AUS("Australia"),
     UA("Ukraine"),
@@ -9,12 +9,12 @@ public enum CrewMemberCitizenship {
 
     private final String name;
 
-    CrewMemberCitizenship(String name) {
+    Citizenship(String name) {
         this.name = name;
     }
 
-    public static CrewMemberCitizenship fromString(String text) {
-        for (CrewMemberCitizenship city : CrewMemberCitizenship.values()) {
+    public static Citizenship fromString(String text) {
+        for (Citizenship city : Citizenship.values()) {
             if (city.name.equalsIgnoreCase(text)) {
                 return city;
             }

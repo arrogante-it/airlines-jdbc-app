@@ -1,4 +1,4 @@
-package com.airlines.jdbc.app.constants;
+package com.airlines.jdbc.app.persistance.constants;
 
 public class AirlinesConstants {
     public static final String INSERT_AIRPLANE_SQL =
@@ -15,19 +15,19 @@ public class AirlinesConstants {
     public static final String UPDATE_CREW_IN_AIRPLANE =
             "update airplane set crew_id = ? where id = ?";
     public static final String UPDATE_AIRPLANE_AND_CREW =
-            "update airplane\n" +
+            "update airplane " +
                     "set code_name = ?," +
-                    "model = ?,\n" +
-                    "manufacture_date = ?,\n" +
-                    "capacity = ?,\n" +
-                    "flight_range = ?,\n" +
-                    "crew_id = ?\n" +
+                    "model = ?, " +
+                    "manufacture_date = ?, " +
+                    "capacity = ?, " +
+                    "flight_range = ?, " +
+                    "crew_id = ? " +
                     "WHERE id = ?";
-    public static final String SELECT_CREW_BY_ID = "select * from crew as c\n" +
-            "left join crew_crew_member as ccm\n" +
-            "on c.id = ccm.crew_id\n" +
-            "left join crew_member as cm\n" +
-            "on cm.id = ccm.crew_member_id\n" +
+    public static final String SELECT_CREW_BY_ID = "select * from crew as c " +
+            "left join crew_crew_member as ccm " +
+            "on c.id = ccm.crew_id " +
+            "left join crew_member as cm " +
+            "on cm.id = ccm.crew_member_id " +
             "where c.id = ?";
 
     public static final String INSERT_CREW_CREW_MEMBER =
