@@ -1,10 +1,10 @@
-create table airlines_db.crew (
+create table crew (
     id bigint auto_increment,
     crew_name varchar(40) not null,
     constraint crew_pk primary key (id)
 );
 
-create table airlines_db.airplane (
+create table airplane (
     id bigint auto_increment,
     code_name varchar(10) not null,
     model varchar(40) not null,
@@ -16,7 +16,7 @@ create table airlines_db.airplane (
     constraint airplane_crew_fk foreign key (crew_id) references crew(id)
 );
 
-create table airlines_db.crew_member (
+create table crew_member (
     id bigint auto_increment primary key,
     first_name varchar(40) not null,
     last_name varchar(60) not null,
@@ -26,7 +26,7 @@ create table airlines_db.crew_member (
     constraint crew_member primary key (id)
 );
 
-create table airlines_db.crew_crew_member (
+create table crew_crew_member (
     crew_id bigint,
     crew_member_id bigint,
     constraint crew_crew_member_pk primary key (crew_id, crew_member_id),

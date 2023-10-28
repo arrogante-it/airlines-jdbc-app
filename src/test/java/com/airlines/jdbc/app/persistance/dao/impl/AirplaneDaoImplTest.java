@@ -22,24 +22,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
 public class AirplaneDaoImplTest {
-    private static final LocalDate DATE = LocalDate.parse("2023-09-12");
+    private final LocalDate DATE = LocalDate.parse("2023-09-12");
 
-    private static AirplaneDao airplaneDAO;
+    private AirplaneDao airplaneDAO;
 
     @BeforeEach
     public void setUp() throws SQLException {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        //createAirplaneTable(h2DataSource);
         createTable(h2DataSource);
         populateTable(h2DataSource);
         airplaneDAO = new AirplaneDaoImpl(h2DataSource);
@@ -75,7 +71,7 @@ public class AirplaneDaoImplTest {
     @Test
     public void shouldCorrectlyFindAirplaneByCode() {
         String code = "RTE543";
-        Airplane expected = getAirplaneInstance(code, 1L, "Fight Club");
+        Airplane expected = getAirplaneInstance(code, 1L, "Grey Crows");
         airplaneDAO.saveAirplane(expected);
 
         Airplane foundAirplane = airplaneDAO.findAirplaneByCode(code);
@@ -163,18 +159,6 @@ public class AirplaneDaoImplTest {
         assertEquals(airplaneDAO.findAllAirplanes().get(0).getCrew().getId(), crew2.getId());
     }
 
-    private static void createAirplaneTable(DataSource dataSource) throws SQLException {
-        try (Connection connection = dataSource.getConnection()) {
-            Statement createTableStatement = connection.createStatement();
-            createTableStatement.execute(CREATE_CREW
-                    + CREATE_AIRPLANE
-                    + CREATE_CREW_MEMBER
-                    + CREATE_CREW_CREW_MEMBER + "insert into crew (crew_name) values ('Fight Club');"
-                    + "insert into crew (crew_name) values ('Grey Crows');"
-            );
-        }
-    }
-
     private Airplane getAirplaneInstance(String codeName, Long crewId, String crewName) {
         Crew crew = new Crew.Builder().build();
         crew.setId(crewId);
@@ -190,8 +174,8 @@ public class AirplaneDaoImplTest {
                 .build();
     }
 
-    static void createTable(DataSource dataSource) throws SQLException {
-        String createTablesSql = FileReader.readWholeFileFromResources("/create_tables.sql");
+    private void createTable(DataSource dataSource) throws SQLException {
+        String createTablesSql = new FileReader().readWholeFileFromResources("create_tables.sql");
 
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
@@ -200,8 +184,8 @@ public class AirplaneDaoImplTest {
         }
     }
 
-    static void populateTable(DataSource dataSource) throws SQLException {
-        String createTablesSql = FileReader.readWholeFileFromResources("/populate.sql");
+    private void populateTable(DataSource dataSource) throws SQLException {
+        String createTablesSql = new FileReader().readWholeFileFromResources("populate.sql");
 
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();

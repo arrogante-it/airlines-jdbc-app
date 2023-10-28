@@ -5,16 +5,16 @@ import org.h2.jdbcx.JdbcDataSource;
 import javax.sql.DataSource;
 
 public class TestDataSourceProvider {
-    static String DEFAULT_DATABASE_NAME = "test_airlines_db";
-    static String DEFAULT_USERNAME = "airlineuser";
-    static String DEFAULT_PASSWORD = "airlinepass";
+    private String DEFAULT_DATABASE_NAME = "test_airlines_db";
+    private String DEFAULT_USERNAME = "airlineuser";
+    private String DEFAULT_PASSWORD = "airlinepass";
 
     public DataSource createDefaultInMemoryH2DataSource() {
         String url = formatH2InMemoryDbUrl(DEFAULT_DATABASE_NAME);
         return createInMemoryH2DataSource(url, DEFAULT_USERNAME, DEFAULT_PASSWORD);
     }
 
-    public DataSource createInMemoryH2DataSource(String url, String username, String password) {
+    private DataSource createInMemoryH2DataSource(String url, String username, String password) {
         JdbcDataSource h2DataSource = new JdbcDataSource();
         h2DataSource.setUser(username);
         h2DataSource.setPassword(password);
