@@ -2,10 +2,6 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 
 import com.airlines.jdbc.app.FileReader;
 import com.airlines.jdbc.app.TestDataSourceProvider;
-import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_AIRPLANE;
-import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW;
-import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_CREW_MEMBER;
-import static com.airlines.jdbc.app.constants.AirlinesTestConstants.CREATE_CREW_MEMBER;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
@@ -43,7 +39,7 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlySaveAirplane() {
-        Airplane airplane = getAirplaneInstance("RTE543", 1L, "Grey Crows");
+        Airplane airplane = getAirplaneInstance("ABC123", 1L, "Grey Crows");
         int expectedSize = airplaneDAO.findAllAirplanes().size();
 
         airplaneDAO.saveAirplane(airplane);
@@ -57,7 +53,7 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlyThrowsException() {
-        Airplane airplane = getAirplaneInstance("RTE543", 200L, "Fight Club");
+        Airplane airplane = getAirplaneInstance("ABC123", 200L, "Grey Crows");
         String expectedErrorMessage = String.format("%1s with id = %2d", "Can't insert into DB ", airplane.getId());
 
         SqlOperationException exception =
@@ -70,7 +66,7 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlyFindAirplaneByCode() {
-        String code = "RTE543";
+        String code = "ABC123";
         Airplane expected = getAirplaneInstance(code, 1L, "Grey Crows");
         airplaneDAO.saveAirplane(expected);
 
@@ -82,7 +78,7 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlyFindAllAirplanes() {
-        Airplane airplane = getAirplaneInstance("RTE543", 1L, "Fight Club");
+        Airplane airplane = getAirplaneInstance("ABC123", 1L, "Grey Crows");
         int airplanesCountBeforeInsert = airplaneDAO.findAllAirplanes().size();
 
         airplaneDAO.saveAirplane(airplane);
@@ -95,8 +91,8 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlyFindAirplanesByCrewName() {
-        String crewName = "Fight Club";
-        Airplane airplane = getAirplaneInstance("RTE543", 1L, crewName);
+        String crewName = "Grey Crows";
+        Airplane airplane = getAirplaneInstance("ABC123", 1L, crewName);
         int airplanesCountBeforeInsert = airplaneDAO.findAllAirplanes().size();
 
         airplaneDAO.saveAirplane(airplane);
@@ -111,7 +107,7 @@ public class AirplaneDaoImplTest {
     @Test
     public void shouldCorrectlyDeleteAirplane() {
         String crewName = "Grey Crows";
-        Airplane airplane = getAirplaneInstance("RTE543", 1L, crewName);
+        Airplane airplane = getAirplaneInstance("ABC123", 1L, crewName);
         airplaneDAO.saveAirplane(airplane);
         List<Airplane> airplanesBefore = airplaneDAO.findAllAirplanes();
 
@@ -138,10 +134,10 @@ public class AirplaneDaoImplTest {
                 .build();
         Crew crew2 = new Crew.Builder().build();
         crew2.setId(2L);
-        crew2.setName("Grey Crows");
+        crew2.setName("Black Tigers");
         Airplane expected = new Airplane.Builder()
                 .id(1L)
-                .codeName("QWE321")
+                .codeName("ABC123")
                 .model(AIRBUS)
                 .manufactureDate(LocalDate.now())
                 .capacity(777)
