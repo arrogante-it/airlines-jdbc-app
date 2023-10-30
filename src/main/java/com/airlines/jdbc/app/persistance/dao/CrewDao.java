@@ -12,5 +12,5 @@ public interface CrewDao {
 
     List<CrewMember> getListOfCrewMembersByCrewId(Long crewId);
 
-    List<CrewMember> getListOfCrewMemberByCrewName(String crewName);
+    List<CrewMember> getListOfCrewMembersByCrewName(String crewName);
 }

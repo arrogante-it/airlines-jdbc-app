@@ -34,9 +34,10 @@ public class CrewDaoImpl implements CrewDao {
     public void addNewCrewMemberToCrew(Crew crew, CrewMember crewMember) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(INSERT_CREW_CREW_MEMBER)) {
-            statement.setLong(1, crew.getId());
-            statement.setLong(2, crewMember.getId());
 
+            statement.setLong(1, crew.getId());
+            statement.setString(2, crew.getName());
+            statement.setLong(3, crewMember.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SqlOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
@@ -64,7 +65,7 @@ public class CrewDaoImpl implements CrewDao {
     }
 
     @Override
-    public List<CrewMember> getListOfCrewMemberByCrewName(String crewName) {
+    public List<CrewMember> getListOfCrewMembersByCrewName(String crewName) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
 
@@ -97,14 +98,13 @@ public class CrewDaoImpl implements CrewDao {
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
-        CrewMember crewMember = new CrewMember.Builder().build();
-        crewMember.setId(resultSet.getLong("id"));
-        crewMember.setFirstName(resultSet.getString("first_name"));
-        crewMember.setLastName(resultSet.getString("last_name"));
-        crewMember.setPosition((Position) resultSet.getObject("position"));
-        crewMember.setBirthday((LocalDate) resultSet.getObject("birthday"));
-        crewMember.setCitizenship((Citizenship) resultSet.getObject("citizenship"));
-
-        return crewMember;
+        return new CrewMember.Builder()
+                .id(resultSet.getLong("id"))
+                .firstName(resultSet.getString("first_name"))
+                .lastName(resultSet.getString("last_name"))
+                .position(Position.fromString(resultSet.getString("position")))
+                .birthday(LocalDate.parse(resultSet.getString("birthday")))
+                .citizenship(Citizenship.fromString(resultSet.getString("citizenship")))
+                .build();
     }
 }

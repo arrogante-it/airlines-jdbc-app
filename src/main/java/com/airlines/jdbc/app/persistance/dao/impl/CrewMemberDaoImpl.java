@@ -14,6 +14,7 @@ import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,9 +34,9 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
-            statement.setObject(3, crewMember.getPosition());
-            statement.setObject(4, crewMember.getBirthday());
-            statement.setObject(5, crewMember.getCitizenship());
+            statement.setObject(3, crewMember.getPosition().getName());
+            statement.setDate(4, Date.valueOf(crewMember.getBirthday()));
+            statement.setObject(5, crewMember.getCitizenship().getName());
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new SqlOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
@@ -79,14 +80,13 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
-        CrewMember crewMember = new CrewMember.Builder().build();
-        crewMember.setId(resultSet.getLong("id"));
-        crewMember.setFirstName(resultSet.getString("first_name"));
-        crewMember.setLastName(resultSet.getString("last_name"));
-        crewMember.setPosition((Position) resultSet.getObject("position"));
-        crewMember.setBirthday((LocalDate) resultSet.getObject("birthday"));
-        crewMember.setCitizenship((Citizenship) resultSet.getObject("citizenship"));
-
-        return crewMember;
+        return new CrewMember.Builder()
+                .id(resultSet.getLong("id"))
+                .firstName(resultSet.getString("first_name"))
+                .lastName(resultSet.getString("last_name"))
+                .position(Position.fromString(resultSet.getString("position")))
+                .birthday(LocalDate.parse(resultSet.getString("birthday")))
+                .citizenship(Citizenship.fromString(resultSet.getString("citizenship")))
+                .build();
     }
 }
