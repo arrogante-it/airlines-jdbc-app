@@ -19,7 +19,7 @@ public enum Citizenship {
                 return city;
             }
         }
-        throw new IllegalArgumentException("No constant with name " + text + " found in CrewMemberCitizenship enum.");
+        throw new IllegalArgumentException("No constant with name " + text + " found in Citizenship enum.");
     }
 
     public String getName() {

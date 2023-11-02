@@ -3,13 +3,13 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.FIND_CREW_MEMBER_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_MEMBER;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.UPDATE_CREW_MEMBER;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
+import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDao;
 import com.airlines.jdbc.app.persistance.entities.Citizenship;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.persistance.entities.Position;
-import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
-import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 
 import javax.sql.DataSource;
@@ -30,7 +30,7 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
     @Override
     public void saveCrewMember(CrewMember crewMember) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER)) {
+             PreparedStatement statement = connection.prepareStatement(INSERT_CREW_MEMBER, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
@@ -38,8 +38,12 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
             statement.setDate(4, Date.valueOf(crewMember.getBirthday()));
             statement.setObject(5, crewMember.getCitizenship().getName());
             statement.executeUpdate();
+
+            Long id = fetchGeneratedId(statement);
+            crewMember.setId(id);
         } catch (SQLException e) {
-            throw new SqlOperationException(CAN_NOT_INSERT_EXCEPTION_MESSAGE, e);
+            throw new SqlOperationException(
+                    String.format("%1s with id = %2d", CAN_NOT_INSERT_EXCEPTION_MESSAGE, crewMember.getId()), e);
         }
     }
 
@@ -50,9 +54,9 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
 
             statement.setString(1, crewMember.getFirstName());
             statement.setString(2, crewMember.getLastName());
-            statement.setObject(3, crewMember.getPosition());
-            statement.setObject(4, crewMember.getBirthday());
-            statement.setObject(5, crewMember.getCitizenship());
+            statement.setString(3, crewMember.getPosition().getName());
+            statement.setDate(4, Date.valueOf(crewMember.getBirthday()));
+            statement.setString(5, crewMember.getCitizenship().getName());
             statement.setLong(6, crewMember.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -67,16 +71,28 @@ public class CrewMemberDaoImpl implements CrewMemberDao {
              PreparedStatement statement = connection.prepareStatement(FIND_CREW_MEMBER_BY_ID)) {
 
             statement.setLong(1, id);
-            try (ResultSet resultSet = statement.executeQuery()) {
-                if (resultSet.next()) {
-                    return extractCrewMemberFromResultSet(resultSet);
-                }
+            ResultSet resultSet = statement.executeQuery();
+
+            CrewMember result = null;
+            if (resultSet.next()) {
+                result = extractCrewMemberFromResultSet(resultSet);
             }
+
+            return result;
         } catch (SQLException e) {
             throw new SqlOperationException(
                     String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, id), e);
         }
-        return null;
+    }
+
+    private Long fetchGeneratedId(PreparedStatement insertStatement) throws SQLException {
+        ResultSet generatedKeys = insertStatement.getGeneratedKeys();
+
+        if (generatedKeys.next()) {
+            return generatedKeys.getLong(1);
+        } else {
+            throw new SqlOperationException("Can not obtain an crewMember ID");
+        }
     }
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {

@@ -11,7 +11,6 @@ public class CrewMember {
     private Position position;
     private LocalDate birthday;
     private Citizenship citizenship;
-
     private List<Crew> crews;
 
     private CrewMember(Builder builder) {
@@ -83,13 +82,12 @@ public class CrewMember {
                 lastName.equals(that.lastName) &&
                 position == that.position &&
                 birthday.equals(that.birthday) &&
-                citizenship == that.citizenship &&
-                crews.equals(that.crews);
+                citizenship == that.citizenship;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstName, lastName, position, birthday, citizenship, crews);
+        return Objects.hash(id, firstName, lastName, position, birthday, citizenship);
     }
 
     @Override

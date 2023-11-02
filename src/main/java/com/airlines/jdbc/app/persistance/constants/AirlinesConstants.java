@@ -12,8 +12,6 @@ public class AirlinesConstants {
             "delete from airplane where id = ?";
     public static final String SELECT_AIRPLANE_BY_NAME =
             "select * from airplane where crew_id in (select id from crew where crew_name = ?)";
-    public static final String UPDATE_CREW_IN_AIRPLANE =
-            "update airplane set crew_id = ? where id = ?";
     public static final String UPDATE_AIRPLANE_AND_CREW =
             "update airplane " +
                     "set code_name = ?," +
@@ -23,22 +21,32 @@ public class AirlinesConstants {
                     "flight_range = ?, " +
                     "crew_id = ? " +
                     "WHERE id = ?";
-    public static final String SELECT_CREW_BY_ID = "select * from crew as c " +
-            "left join crew_crew_member as ccm " +
-            "on c.id = ccm.crew_id " +
-            "left join crew_member as cm " +
-            "on cm.id = ccm.crew_member_id " +
-            "where c.id = ?";
+    public static final String SELECT_CREW_BY_ID =
+            "select * from crew as c " +
+                    "left join crew_crew_member as ccm " +
+                    "on c.id = ccm.crew_id " +
+                    "left join crew_member as cm " +
+                    "on cm.id = ccm.crew_member_id " +
+                    "where c.id = ?";
 
+    public static final String INSERT_CREW_SQL =
+            "insert into crew (crew_name) values (?)";
     public static final String INSERT_CREW_CREW_MEMBER =
             "insert into crew_crew_member (crew_id, crew_member_id) values (?, ?)";
     public static final String SELECT_CREW_MEMBERS_BY_ID =
-            "select cm.* from crew_member cm join crew_crew_member cc on cm.id = cc.crew_member_id where cc.crew_id = ?";
+            "select cm.* " +
+                    "from crew_member cm " +
+                    "join crew_crew_member cc " +
+                    "on cm.id = cc.crew_member_id " +
+                    "where cc.crew_id = ?";
     public static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =
-            "select cm.* from crew_member cm join crew_crew_member cc on cm.id = cc.crew_member_id " +
-                    "join crew c on cc.crew_id = c.id where c.name = ?";
-    public static final String INSERT_CREW_CREW_MEMBER_TO_CREW =
-            "insert into crew_crew_member (crew_id_foreign, crew_member_id_foreign) values (?, ?)";
+            "select cm.* " +
+                    "from airlines_db.crew as c " +
+                    "join airlines_db.crew_crew_member as ccm on c.id = ccm.crew_id " +
+                    "join airlines_db.crew_member as cm on ccm.crew_member_id = cm.id " +
+                    "where c.crew_name = ?";
+    public static final String FIND_CREW_BY_ID =
+            "select * from crew where id = ?";
 
     public static final String INSERT_CREW_MEMBER =
             "insert into crew_member (first_name, last_name, position, birthday, citizenship) values (?, ?, ?, ?, ?)";

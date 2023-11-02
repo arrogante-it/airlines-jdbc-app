@@ -70,10 +70,10 @@ public class AirplaneDaoImplTest {
         Airplane expected = getAirplaneInstance(code, 1L, "Grey Crows");
         airplaneDAO.saveAirplane(expected);
 
-        Airplane foundAirplane = airplaneDAO.findAirplaneByCode(code);
+        Airplane actual = airplaneDAO.findAirplaneByCode(code);
 
-        assertNotNull(foundAirplane.getId());
-        assertEquals(expected, foundAirplane);
+        assertNotNull(actual.getId());
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -181,11 +181,11 @@ public class AirplaneDaoImplTest {
     }
 
     private void populateTable(DataSource dataSource) throws SQLException {
-        String createTablesSql = new FileReader().readWholeFileFromResources("populate.sql");
+        String populateSql = new FileReader().readWholeFileFromResources("populate.sql");
 
         try (Connection connection = dataSource.getConnection()) {
             Statement statement = connection.createStatement();
-            statement.execute(createTablesSql);
+            statement.execute(populateSql);
             statement.close();
         }
     }

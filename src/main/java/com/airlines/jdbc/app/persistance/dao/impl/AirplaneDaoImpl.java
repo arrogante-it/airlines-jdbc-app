@@ -7,15 +7,15 @@ import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELE
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_BY_CODENAME_SQL;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.UPDATE_AIRPLANE_AND_CREW;
-import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
-import com.airlines.jdbc.app.persistance.entities.Airplane;
-import com.airlines.jdbc.app.persistance.entities.Crew;
-import com.airlines.jdbc.app.persistance.entities.Model;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_DELETE_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_ALL_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_SELECT_EXCEPTION_MESSAGE;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_UPDATE_EXCEPTION_MESSAGE;
+import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
+import com.airlines.jdbc.app.persistance.entities.Airplane;
+import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.persistance.entities.Model;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 import static java.util.Optional.ofNullable;
 
@@ -154,7 +154,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
         if (generatedKeys.next()) {
             return generatedKeys.getLong(1);
         } else {
-            throw new SqlOperationException("Can not obtain an account ID");
+            throw new SqlOperationException("Can not obtain an airplane ID");
         }
     }
 

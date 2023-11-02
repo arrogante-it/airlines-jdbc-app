@@ -21,12 +21,12 @@ insert into airplane (code_name, model, manufacture_date, capacity, flight_range
 values ('WER567', 'Gulfstream G550', '2000-03-03', 550, 7000);
 
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
-values ('John', 'Doe', 'Captain', '1985-05-10', 'UK');
+values ('John', 'Doe', 'Captain', '1985-05-10', 'United Kingdom');
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
-values ('Jesse', 'Pinkman', 'Corporal', '1995-06-11', 'UK');
+values ('Jesse', 'Pinkman', 'Corporal', '1995-06-11', 'United Kingdom');
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
-values ('Walter', 'White', 'Warrant officer', '1975-07-17', 'UK');
+values ('Walter', 'White', 'Warrant officer', '1975-07-17', 'United Kingdom');
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
-values ('Marty', 'Ring', 'Sergeant', '2000-08-18', 'AUS');
+values ('Marty', 'Ring', 'Sergeant', '2000-08-18', 'Australia');
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
-values ('Victor', 'Phlimenko', 'Lieutenant', '1997-04-09', 'UA');
+values ('Victor', 'Phlimenko', 'Lieutenant', '1997-04-09', 'Ukraine');

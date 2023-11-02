@@ -19,7 +19,7 @@ public enum Position {
                 return position;
             }
         }
-        throw new IllegalArgumentException("No constant with name " + text + " found in CrewMemberPosition enum.");
+        throw new IllegalArgumentException("No constant with name " + text + " found in Position enum.");
     }
 
     public String getName() {

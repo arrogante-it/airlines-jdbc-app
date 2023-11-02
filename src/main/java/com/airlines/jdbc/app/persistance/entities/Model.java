@@ -19,7 +19,7 @@ public enum Model {
                 return model;
             }
         }
-        throw new IllegalArgumentException("No constant with name " + text + " found in AirplaneModel enum.");
+        throw new IllegalArgumentException("No constant with name " + text + " found in Model enum.");
     }
 
     public String getName() {
