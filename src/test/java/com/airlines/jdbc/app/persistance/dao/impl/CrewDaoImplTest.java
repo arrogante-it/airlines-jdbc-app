@@ -1,27 +1,31 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.FileReader;
+import com.airlines.jdbc.app.InputUtils;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.CrewDao;
+import static com.airlines.jdbc.app.persistance.entities.Citizenship.UK;
 import com.airlines.jdbc.app.persistance.entities.Crew;
+import com.airlines.jdbc.app.persistance.entities.CrewMember;
+import static com.airlines.jdbc.app.persistance.entities.Position.COR;
+import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.List;
 
 class CrewDaoImplTest {
     private CrewDao crewDao;
 
     @BeforeEach
-    public void setUp() throws SQLException {
+    public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        createTables(h2DataSource);
-        populate(h2DataSource);
+        InputUtils.createTables(h2DataSource);
+        InputUtils.populate(h2DataSource);
         crewDao = new CrewDaoImpl(h2DataSource);
     }
 
@@ -41,38 +45,80 @@ class CrewDaoImplTest {
     }
 
     @Test
+    public void shouldCorrectlyThrowsException() {
+        Crew crew = new Crew.Builder().build();
+        String expectedErrorMessage = String.format("%1s with id = %2d", "Can't insert into DB ", crew.getId());
+
+        SqlOperationException exception =
+                assertThrows(SqlOperationException.class, () -> crewDao.saveCrew(crew));
+
+        String actualErrorMessage = exception.getMessage();
+
+        assertEquals(expectedErrorMessage, actualErrorMessage);
+    }
+
+    @Test
     public void shouldCorrectlyGetListOfCrewMembersByCrewId() {
+        Long crewMemberId = 2L;
+        CrewMember expected = getCrewMemberInstance(crewMemberId);
+        crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
+
+        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewId(1L);
+
+        assertNotNull(crewMembers);
+        assertEquals(expected, crewMembers.get(0));
+        assertEquals(expected.getId(), crewMembers.get(0).getId());
     }
 
     @Test
     public void shouldCorrectlyGetListOfCrewMemberByCrewName() {
+        Long crewMemberId = 2L;
+        CrewMember expected = getCrewMemberInstance(crewMemberId);
+        crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
+
+        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewName("Grey Crows");
+
+        assertNotNull(crewMembers);
+        assertEquals(expected, crewMembers.get(0));
+        assertEquals(expected.getId(), crewMembers.get(0).getId());
     }
 
     @Test
     public void shouldCorrectlyLinkCrewMemberToCrew() {
+        Long crewMemberId = 2L;
+        CrewMember expected = getCrewMemberInstance(crewMemberId);
+
+        crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
+
+        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewId(1L);
+
+        assertNotNull(crewMembers.get(0));
+        assertEquals(expected, crewMembers.get(0));
+        assertEquals(expected.getId(), crewMembers.get(0).getId());
     }
 
     @Test
     public void shouldCorrectlyFindCrewById() {
+        Crew expected = new Crew.Builder()
+                .id(1L)
+                .name("Grey Crows")
+                .build();
+
+        Crew actual = crewDao.findCrewById(1L);
+
+        assertNotNull(actual);
+        assertEquals(expected, actual);
+        assertEquals(expected.getId(), actual.getId());
     }
 
-    private void createTables(DataSource dataSource) throws SQLException {
-        String createTablesSql = new FileReader().readWholeFileFromResources("create_tables.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(createTablesSql);
-            statement.close();
-        }
-    }
-
-    private void populate(DataSource dataSource) throws SQLException {
-        String populateSql = new FileReader().readWholeFileFromResources("populate.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(populateSql);
-            statement.close();
-        }
+    private CrewMember getCrewMemberInstance(Long crewMemberId) {
+        return new CrewMember.Builder()
+                .id(crewMemberId)
+                .firstName("Jesse")
+                .lastName("Pinkman")
+                .position(COR)
+                .birthday(LocalDate.parse("1995-06-11"))
+                .citizenship(UK)
+                .build();
     }
 }

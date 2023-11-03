@@ -41,9 +41,9 @@ public class AirlinesConstants {
                     "where cc.crew_id = ?";
     public static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =
             "select cm.* " +
-                    "from airlines_db.crew as c " +
-                    "join airlines_db.crew_crew_member as ccm on c.id = ccm.crew_id " +
-                    "join airlines_db.crew_member as cm on ccm.crew_member_id = cm.id " +
+                    "from crew as c " +
+                    "join crew_crew_member as ccm on c.id = ccm.crew_id " +
+                    "join crew_member as cm on ccm.crew_member_id = cm.id " +
                     "where c.crew_name = ?";
     public static final String FIND_CREW_BY_ID =
             "select * from crew where id = ?";

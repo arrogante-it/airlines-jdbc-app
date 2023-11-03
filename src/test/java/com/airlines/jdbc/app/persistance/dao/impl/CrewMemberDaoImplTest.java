@@ -1,9 +1,8 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.FileReader;
+import com.airlines.jdbc.app.InputUtils;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDao;
-import static com.airlines.jdbc.app.persistance.entities.Citizenship.AUS;
 import static com.airlines.jdbc.app.persistance.entities.Citizenship.UK;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import static com.airlines.jdbc.app.persistance.entities.Position.COR;
@@ -16,19 +15,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 class CrewMemberDaoImplTest {
     private CrewMemberDao crewMemberDao;
 
     @BeforeEach
-    public void setUp() throws SQLException {
+    public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        createTables(h2DataSource);
-        populate(h2DataSource);
+        InputUtils.createTables(h2DataSource);
+        InputUtils.populate(h2DataSource);
         crewMemberDao = new CrewMemberDaoImpl(h2DataSource);
     }
 
@@ -38,8 +34,8 @@ class CrewMemberDaoImplTest {
                 .firstName("Robert")
                 .lastName("Paulson")
                 .position(COR)
-                .birthday(LocalDate.parse("1985-07-08"))
-                .citizenship(AUS)
+                .birthday(LocalDate.parse("1995-06-11"))
+                .citizenship(UK)
                 .build();
         crewMemberDao.saveCrewMember(expected);
 
@@ -57,8 +53,8 @@ class CrewMemberDaoImplTest {
                 .firstName(moreThanFourtySymbols)
                 .lastName("Paulson")
                 .position(COR)
-                .birthday(LocalDate.parse("1985-07-08"))
-                .citizenship(AUS)
+                .birthday(LocalDate.parse("1995-06-11"))
+                .citizenship(UK)
                 .build();
         String expectedErrorMessage = String.format("%1s with id = %2d", "Can't insert into DB ", crewMember.getId());
 
@@ -78,8 +74,8 @@ class CrewMemberDaoImplTest {
                 .firstName("Robert")
                 .lastName("Paulson")
                 .position(COR)
-                .birthday(LocalDate.parse("1985-07-08"))
-                .citizenship(AUS)
+                .birthday(LocalDate.parse("1995-06-11"))
+                .citizenship(UK)
                 .build();
         CrewMember actual1 = crewMemberDao.findCrewMemberById(commonId);
 
@@ -110,25 +106,5 @@ class CrewMemberDaoImplTest {
         assertNotNull(actual);
         assertEquals(expected, actual);
         assertEquals(expected.getId(), actual.getId());
-    }
-
-    private void createTables(DataSource dataSource) throws SQLException {
-        String createTablesSql = new FileReader().readWholeFileFromResources("create_tables.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(createTablesSql);
-            statement.close();
-        }
-    }
-
-    private void populate(DataSource dataSource) throws SQLException {
-        String populateSql = new FileReader().readWholeFileFromResources("populate.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(populateSql);
-            statement.close();
-        }
     }
 }

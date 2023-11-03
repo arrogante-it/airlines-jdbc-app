@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.FileReader;
+import com.airlines.jdbc.app.InputUtils;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
@@ -18,9 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -30,10 +27,10 @@ public class AirplaneDaoImplTest {
     private AirplaneDao airplaneDAO;
 
     @BeforeEach
-    public void setUp() throws SQLException {
+    public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        createTable(h2DataSource);
-        populateTable(h2DataSource);
+        InputUtils.createTables(h2DataSource);
+        InputUtils.populate(h2DataSource);
         airplaneDAO = new AirplaneDaoImpl(h2DataSource);
     }
 
@@ -168,25 +165,5 @@ public class AirplaneDaoImplTest {
                 .flightRange(3000)
                 .crew(crew)
                 .build();
-    }
-
-    private void createTable(DataSource dataSource) throws SQLException {
-        String createTablesSql = new FileReader().readWholeFileFromResources("create_tables.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(createTablesSql);
-            statement.close();
-        }
-    }
-
-    private void populateTable(DataSource dataSource) throws SQLException {
-        String populateSql = new FileReader().readWholeFileFromResources("populate.sql");
-
-        try (Connection connection = dataSource.getConnection()) {
-            Statement statement = connection.createStatement();
-            statement.execute(populateSql);
-            statement.close();
-        }
     }
 }
