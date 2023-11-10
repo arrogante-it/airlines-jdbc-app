@@ -1,3 +1,8 @@
+drop table if exists crew_crew_member;
+drop table if exists crew_member;
+drop table if exists airplane;
+drop table if exists crew;
+
 create table crew (
     id bigint auto_increment,
     crew_name varchar(40) not null,
@@ -20,7 +25,7 @@ create table crew_member (
     id bigint auto_increment primary key,
     first_name varchar(40) not null,
     last_name varchar(60) not null,
-    position varchar(255) not null,
+    position varchar(3) not null,
     birthday date not null,
     citizenship varchar(50) not null,
     constraint crew_member primary key (id)

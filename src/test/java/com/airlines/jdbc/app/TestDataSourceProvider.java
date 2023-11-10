@@ -11,13 +11,10 @@ public class TestDataSourceProvider {
 
     public DataSource createDefaultInMemoryH2DataSource() {
         String url = formatH2InMemoryDbUrl(DEFAULT_DATABASE_NAME);
-        return createInMemoryH2DataSource(url, DEFAULT_USERNAME, DEFAULT_PASSWORD);
-    }
 
-    private DataSource createInMemoryH2DataSource(String url, String username, String password) {
         JdbcDataSource h2DataSource = new JdbcDataSource();
-        h2DataSource.setUser(username);
-        h2DataSource.setPassword(password);
+        h2DataSource.setUser(DEFAULT_USERNAME);
+        h2DataSource.setPassword(DEFAULT_PASSWORD);
         h2DataSource.setUrl(url);
 
         return h2DataSource;

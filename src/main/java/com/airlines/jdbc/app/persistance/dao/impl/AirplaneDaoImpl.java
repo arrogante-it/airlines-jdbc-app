@@ -131,7 +131,7 @@ public class AirplaneDaoImpl implements AirplaneDao {
     }
 
     @Override
-    public void updateAirplaneAndSetCrewId(Airplane airplane, Crew crew) {
+    public void updateAirplaneWithCrewId(Airplane airplane, Crew crew) {
         try (Connection connection = dataSource.getConnection()) {
             PreparedStatement statement = connection.prepareStatement(UPDATE_AIRPLANE_AND_CREW);
 

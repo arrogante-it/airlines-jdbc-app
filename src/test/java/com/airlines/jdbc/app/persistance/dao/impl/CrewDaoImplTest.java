@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.InputUtils;
+import com.airlines.jdbc.app.InputUtil;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.CrewDao;
 import static com.airlines.jdbc.app.persistance.entities.Citizenship.UK;
@@ -24,8 +24,8 @@ class CrewDaoImplTest {
     @BeforeEach
     public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        InputUtils.createTables(h2DataSource);
-        InputUtils.populate(h2DataSource);
+        InputUtil.createTables(h2DataSource);
+        InputUtil.populate(h2DataSource);
         crewDao = new CrewDaoImpl(h2DataSource);
     }
 
@@ -63,7 +63,7 @@ class CrewDaoImplTest {
         CrewMember expected = getCrewMemberInstance(crewMemberId);
         crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
 
-        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewId(1L);
+        List<CrewMember> crewMembers = crewDao.getCrewMembersListByCrewId(1L);
 
         assertNotNull(crewMembers);
         assertEquals(expected, crewMembers.get(0));
@@ -76,7 +76,7 @@ class CrewDaoImplTest {
         CrewMember expected = getCrewMemberInstance(crewMemberId);
         crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
 
-        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewName("Grey Crows");
+        List<CrewMember> crewMembers = crewDao.getCrewMembersListByCrewName("Grey Crows");
 
         assertNotNull(crewMembers);
         assertEquals(expected, crewMembers.get(0));
@@ -90,7 +90,7 @@ class CrewDaoImplTest {
 
         crewDao.linkCrewMemberToCrew(crewMemberId, 1L);
 
-        List<CrewMember> crewMembers = crewDao.getListOfCrewMembersByCrewId(1L);
+        List<CrewMember> crewMembers = crewDao.getCrewMembersListByCrewId(1L);
 
         assertNotNull(crewMembers.get(0));
         assertEquals(expected, crewMembers.get(0));

@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.InputUtils;
+import com.airlines.jdbc.app.InputUtil;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.AirplaneDao;
 import com.airlines.jdbc.app.persistance.entities.Airplane;
@@ -29,8 +29,8 @@ public class AirplaneDaoImplTest {
     @BeforeEach
     public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        InputUtils.createTables(h2DataSource);
-        InputUtils.populate(h2DataSource);
+        InputUtil.createTables(h2DataSource);
+        InputUtil.populate(h2DataSource);
         airplaneDAO = new AirplaneDaoImpl(h2DataSource);
     }
 
@@ -143,7 +143,7 @@ public class AirplaneDaoImplTest {
                 .build();
         airplaneDAO.saveAirplane(airplane1);
 
-        airplaneDAO.updateAirplaneAndSetCrewId(expected, crew2);
+        airplaneDAO.updateAirplaneWithCrewId(expected, crew2);
 
         Airplane actual = airplaneDAO.findAllAirplanes().iterator().next();
 

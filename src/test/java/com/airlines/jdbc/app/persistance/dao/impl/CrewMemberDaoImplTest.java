@@ -1,6 +1,6 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import com.airlines.jdbc.app.InputUtils;
+import com.airlines.jdbc.app.InputUtil;
 import com.airlines.jdbc.app.TestDataSourceProvider;
 import com.airlines.jdbc.app.persistance.dao.CrewMemberDao;
 import static com.airlines.jdbc.app.persistance.entities.Citizenship.UK;
@@ -23,8 +23,8 @@ class CrewMemberDaoImplTest {
     @BeforeEach
     public void setUp() {
         DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
-        InputUtils.createTables(h2DataSource);
-        InputUtils.populate(h2DataSource);
+        InputUtil.createTables(h2DataSource);
+        InputUtil.populate(h2DataSource);
         crewMemberDao = new CrewMemberDaoImpl(h2DataSource);
     }
 

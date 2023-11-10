@@ -8,11 +8,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class DbConnector {
-    private String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+    private final String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
     private final String APPLICATION_PROPERTIES_FILE =  rootPath + "application.properties";
 
     public DataSource createBasicDataSource() {
-        Properties properties = new Properties();
+        Properties properties = getProperties();
         try {
             FileInputStream fileInputStream = new FileInputStream(APPLICATION_PROPERTIES_FILE);
             properties.load(fileInputStream);
@@ -28,5 +28,18 @@ public class DbConnector {
         dataSource.setPassword(properties.getProperty("mysql.datasource.password"));
 
         return dataSource;
+    }
+
+    private Properties getProperties() {
+        Properties properties = new Properties();
+        try {
+            FileInputStream fileInputStream = new FileInputStream(APPLICATION_PROPERTIES_FILE);
+            properties.load(fileInputStream);
+            fileInputStream.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return properties;
     }
 }

@@ -3,6 +3,7 @@ package com.airlines.jdbc.app.persistance.dao.impl;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.FIND_CREW_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_CREW_MEMBER;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_SQL;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_MEMBERS_BY_CREW_NAME;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_MEMBERS_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
@@ -48,7 +49,7 @@ public class CrewDaoImpl implements CrewDao {
     }
 
     @Override
-    public List<CrewMember> getListOfCrewMembersByCrewId(Long crewId) {
+    public List<CrewMember> getCrewMembersListByCrewId(Long crewId) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_ID)) {
 
@@ -68,7 +69,7 @@ public class CrewDaoImpl implements CrewDao {
     }
 
     @Override
-    public List<CrewMember> getListOfCrewMembersByCrewName(String crewName) {
+    public List<CrewMember> getCrewMembersListByCrewName(String crewName) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(SELECT_CREW_MEMBERS_BY_CREW_NAME)) {
 
@@ -103,16 +104,22 @@ public class CrewDaoImpl implements CrewDao {
     @Override
     public Crew findCrewById(Long id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(FIND_CREW_BY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(/*FIND_CREW_BY_ID*/ SELECT_CREW_BY_ID)) {
 
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
+
+            List<CrewMember> crewMembers = new ArrayList<>();
+            while (resultSet.next()) {
+                crewMembers.add(extractCrewMemberFromResultSet(resultSet));
+            }
 
             Crew result = null;
             if (resultSet.next()) {
                 result = new Crew.Builder()
                         .id(resultSet.getLong("id"))
                         .name(resultSet.getString("crew_name"))
+                        .crewMembers(crewMembers)
                         .build();
             }
 
@@ -129,7 +136,7 @@ public class CrewDaoImpl implements CrewDao {
         if (generatedKeys.next()) {
             return generatedKeys.getLong(1);
         } else {
-            throw new SqlOperationException("Can not obtain an airplane ID");
+            throw new SqlOperationException("Can not obtain an crew ID");
         }
     }
 

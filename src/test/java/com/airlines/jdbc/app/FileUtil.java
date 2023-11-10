@@ -1,7 +1,6 @@
 package com.airlines.jdbc.app;
 
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
@@ -10,11 +9,10 @@ import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Stream;
 
-import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
 import static java.util.stream.Collectors.joining;
 
-public class FileReader {
-    public String readWholeFileFromResources(String fileName) {
+public final class FileUtil {
+    public static String readWholeFileFromResources(String fileName) {
         Path filePath = createPathFromFileName(fileName);
 
         try (Stream<String> fileLinesStream = openFileLinesStream(filePath)) {
@@ -22,7 +20,7 @@ public class FileReader {
         }
     }
 
-    private Stream<String> openFileLinesStream(Path filePath) {
+    private static Stream<String> openFileLinesStream(Path filePath) {
         try {
             return Files.lines(filePath);
         } catch (IOException e) {
@@ -30,9 +28,9 @@ public class FileReader {
         }
     }
 
-    private Path createPathFromFileName(String fileName) {
+    private static Path createPathFromFileName(String fileName) {
         Objects.requireNonNull(fileName);
-        URL fileUrl = FileReader.class.getClassLoader().getResource(fileName);
+        URL fileUrl = FileUtil.class.getClassLoader().getResource(fileName);
 
         try {
             Objects.requireNonNull(fileUrl);

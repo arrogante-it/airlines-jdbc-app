@@ -11,7 +11,6 @@ public class CrewMember {
     private Position position;
     private LocalDate birthday;
     private Citizenship citizenship;
-    private List<Crew> crews;
 
     private CrewMember(Builder builder) {
         this.id = builder.id;
@@ -20,7 +19,6 @@ public class CrewMember {
         this.position = builder.position;
         this.birthday = builder.birthday;
         this.citizenship = builder.citizenship;
-        this.crews = builder.crews;
     }
 
     public static class Builder {
@@ -30,7 +28,6 @@ public class CrewMember {
         private Position position;
         private LocalDate birthday;
         private Citizenship citizenship;
-        private List<Crew> crews;
 
         public Builder id(Long id) {
             this.id = id;
@@ -59,11 +56,6 @@ public class CrewMember {
 
         public Builder citizenship(Citizenship citizenship) {
             this.citizenship = citizenship;
-            return this;
-        }
-
-        public Builder crews(List<Crew> crews) {
-            this.crews = crews;
             return this;
         }
 
@@ -99,7 +91,6 @@ public class CrewMember {
                 ", position=" + position +
                 ", birthday=" + birthday +
                 ", citizenship=" + citizenship +
-                ", crews=" + crews +
                 '}';
     }
 
@@ -149,13 +140,5 @@ public class CrewMember {
 
     public void setCitizenship(Citizenship citizenship) {
         this.citizenship = citizenship;
-    }
-
-    public List<Crew> getCrews() {
-        return crews;
-    }
-
-    public void setCrews(List<Crew> crews) {
-        this.crews = crews;
     }
 }

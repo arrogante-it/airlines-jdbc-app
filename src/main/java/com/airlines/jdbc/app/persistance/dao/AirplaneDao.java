@@ -16,5 +16,5 @@ public interface AirplaneDao {
 
     List<Airplane> searchAirplanesByCrewName(String crewName);
 
-    void updateAirplaneAndSetCrewId(Airplane airplane, Crew crew);
+    void updateAirplaneWithCrewId(Airplane airplane, Crew crew);
 }

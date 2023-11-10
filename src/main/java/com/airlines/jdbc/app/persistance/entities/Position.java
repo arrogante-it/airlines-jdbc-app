@@ -5,7 +5,10 @@ public enum Position {
     SER("Sergeant"),
     WO("Warrant officer"),
     LIE("Lieutenant"),
-    COR("Corporal");
+    COR("Corporal"),
+    STE("Steward"),
+    PIL("Pilot"),
+    SEC("Second Pilot");
 
     private final String name;
 

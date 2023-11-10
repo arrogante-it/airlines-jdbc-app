@@ -10,9 +10,9 @@ public interface CrewDao {
 
     void linkCrewMemberToCrew(Long crewMemberId, Long crewId);
 
-    List<CrewMember> getListOfCrewMembersByCrewId(Long crewId);
+    List<CrewMember> getCrewMembersListByCrewId(Long crewId);
 
-    List<CrewMember> getListOfCrewMembersByCrewName(String crewName);
+    List<CrewMember> getCrewMembersListByCrewName(String crewName);
 
     Crew findCrewById(Long id);
 }
