@@ -11,8 +11,8 @@ import com.airlines.jdbc.app.persistance.entities.Citizenship;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.persistance.entities.Position;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
+import com.zaxxer.hikari.HikariDataSource;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,9 +21,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 
 public class CrewMemberDaoImpl implements CrewMemberDao {
-    private final DataSource dataSource;
+    private final HikariDataSource dataSource;
 
-    public CrewMemberDaoImpl(DataSource dataSource) {
+    public CrewMemberDaoImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

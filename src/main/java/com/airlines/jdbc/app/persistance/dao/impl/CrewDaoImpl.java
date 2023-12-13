@@ -1,9 +1,8 @@
 package com.airlines.jdbc.app.persistance.dao.impl;
 
-import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.FIND_CREW_BY_ID;
+import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.FIND_CREW_BY_ID_WITH_CREW_MEMBERS;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_CREW_MEMBER;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.INSERT_CREW_SQL;
-import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_MEMBERS_BY_CREW_NAME;
 import static com.airlines.jdbc.app.persistance.constants.AirlinesConstants.SELECT_CREW_MEMBERS_BY_ID;
 import static com.airlines.jdbc.app.persistance.constants.ExceptionConstants.CAN_NOT_INSERT_EXCEPTION_MESSAGE;
@@ -15,8 +14,8 @@ import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import com.airlines.jdbc.app.persistance.entities.Position;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
+import com.zaxxer.hikari.HikariDataSource;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,9 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CrewDaoImpl implements CrewDao {
-    private final DataSource dataSource;
+    private final HikariDataSource dataSource;
 
-    public CrewDaoImpl(DataSource dataSource) {
+    public CrewDaoImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
     }
 
@@ -104,29 +103,34 @@ public class CrewDaoImpl implements CrewDao {
     @Override
     public Crew findCrewById(Long id) {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(/*FIND_CREW_BY_ID*/ SELECT_CREW_BY_ID)) {
+             PreparedStatement statement = connection.prepareStatement(FIND_CREW_BY_ID_WITH_CREW_MEMBERS)) {
 
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
 
+            Crew result = null;
             List<CrewMember> crewMembers = new ArrayList<>();
+
             while (resultSet.next()) {
+                if (result == null) {
+                    result = new Crew.Builder()
+                            .id(resultSet.getLong("crew_id"))
+                            .name(resultSet.getString("crew_name"))
+                            .build();
+
+                }
+
                 crewMembers.add(extractCrewMemberFromResultSet(resultSet));
             }
 
-            Crew result = null;
-            if (resultSet.next()) {
-                result = new Crew.Builder()
-                        .id(resultSet.getLong("id"))
-                        .name(resultSet.getString("crew_name"))
-                        .crewMembers(crewMembers)
-                        .build();
+            if (result != null) {
+                result.setCrewMembers(crewMembers);
             }
 
             return result;
         } catch (SQLException e) {
             throw new SqlOperationException(
-                    String.format("%1s with id = %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, id), e);
+                    String.format("%1s %2d", CAN_NOT_SELECT_EXCEPTION_MESSAGE, id), e);
         }
     }
 
@@ -142,7 +146,7 @@ public class CrewDaoImpl implements CrewDao {
 
     private CrewMember extractCrewMemberFromResultSet(ResultSet resultSet) throws SQLException {
         return new CrewMember.Builder()
-                .id(resultSet.getLong("id"))
+                .id(resultSet.getLong("member_id"))
                 .firstName(resultSet.getString("first_name"))
                 .lastName(resultSet.getString("last_name"))
                 .position(Position.fromString(resultSet.getString("position")))

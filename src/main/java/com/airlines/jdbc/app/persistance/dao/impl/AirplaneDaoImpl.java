@@ -17,9 +17,9 @@ import com.airlines.jdbc.app.persistance.entities.Airplane;
 import com.airlines.jdbc.app.persistance.entities.Crew;
 import com.airlines.jdbc.app.persistance.entities.Model;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
+import com.zaxxer.hikari.HikariDataSource;
 import static java.util.Optional.ofNullable;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -31,9 +31,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AirplaneDaoImpl implements AirplaneDao {
-    private final DataSource dataSource;
+    private final HikariDataSource dataSource;
 
-    public AirplaneDaoImpl(DataSource dataSource) {
+    public AirplaneDaoImpl(HikariDataSource dataSource) {
         this.dataSource = dataSource;
     }
 

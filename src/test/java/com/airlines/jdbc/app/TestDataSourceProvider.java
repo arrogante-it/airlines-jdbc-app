@@ -1,21 +1,19 @@
 package com.airlines.jdbc.app;
 
-import org.h2.jdbcx.JdbcDataSource;
-
-import javax.sql.DataSource;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class TestDataSourceProvider {
     private String DEFAULT_DATABASE_NAME = "test_airlines_db";
     private String DEFAULT_USERNAME = "airlineuser";
     private String DEFAULT_PASSWORD = "airlinepass";
 
-    public DataSource createDefaultInMemoryH2DataSource() {
+    public HikariDataSource createDefaultInMemoryH2DataSource() {
         String url = formatH2InMemoryDbUrl(DEFAULT_DATABASE_NAME);
 
-        JdbcDataSource h2DataSource = new JdbcDataSource();
-        h2DataSource.setUser(DEFAULT_USERNAME);
+        HikariDataSource h2DataSource = new HikariDataSource();
+        h2DataSource.setUsername(DEFAULT_USERNAME);
         h2DataSource.setPassword(DEFAULT_PASSWORD);
-        h2DataSource.setUrl(url);
+        h2DataSource.setJdbcUrl(url);
 
         return h2DataSource;
     }

@@ -21,6 +21,7 @@ public class AirlinesConstants {
                     "flight_range = ?, " +
                     "crew_id = ? " +
                     "WHERE id = ?";
+
     public static final String SELECT_CREW_BY_ID =
             "select * from crew as c " +
                     "left join crew_crew_member as ccm " +
@@ -28,25 +29,48 @@ public class AirlinesConstants {
                     "left join crew_member as cm " +
                     "on cm.id = ccm.crew_member_id " +
                     "where c.id = ?";
-
     public static final String INSERT_CREW_SQL =
             "insert into crew (crew_name) values (?)";
     public static final String INSERT_CREW_CREW_MEMBER =
             "insert into crew_crew_member (crew_id, crew_member_id) values (?, ?)";
     public static final String SELECT_CREW_MEMBERS_BY_ID =
-            "select cm.* " +
+            "select cm.id as member_id, " +
+                    "cm.first_name, " +
+                    "cm.last_name, " +
+                    "cm.position, " +
+                    "cm.birthday, " +
+                    "cm.citizenship " +
                     "from crew_member cm " +
                     "join crew_crew_member cc " +
                     "on cm.id = cc.crew_member_id " +
                     "where cc.crew_id = ?";
     public static final String SELECT_CREW_MEMBERS_BY_CREW_NAME =
-            "select cm.* " +
+            "select cm.id as member_id, " +
+                    "cm.first_name, " +
+                    "cm.last_name, " +
+                    "cm.position, " +
+                    "cm.birthday, " +
+                    "cm.citizenship " +
                     "from crew as c " +
                     "join crew_crew_member as ccm on c.id = ccm.crew_id " +
                     "join crew_member as cm on ccm.crew_member_id = cm.id " +
                     "where c.crew_name = ?";
     public static final String FIND_CREW_BY_ID =
             "select * from crew where id = ?";
+    public static final String FIND_CREW_BY_ID_WITH_CREW_MEMBERS =
+            "select c.id as crew_id, c.crew_name, " +
+                    "cm.id as member_id, " +
+                    "cm.first_name, " +
+                    "cm.last_name, " +
+                    "cm.position, " +
+                    "cm.birthday, " +
+                    "cm.citizenship " +
+                    "from crew as c  " +
+                    "left join crew_crew_member as ccm " +
+                    "on c.id = ccm.crew_id " +
+                    "left join crew_member as cm " +
+                    "on ccm.crew_member_id = cm.id " +
+                    "where c.id = ?";
 
     public static final String INSERT_CREW_MEMBER =
             "insert into crew_member (first_name, last_name, position, birthday, citizenship) values (?, ?, ?, ?, ?)";

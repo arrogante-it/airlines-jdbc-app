@@ -9,6 +9,7 @@ import static com.airlines.jdbc.app.persistance.entities.Model.AIRBUS;
 import static com.airlines.jdbc.app.persistance.entities.Model.BOEING;
 import static com.airlines.jdbc.app.persistance.entities.Model.BOMBARDIER;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
+import com.zaxxer.hikari.HikariDataSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -17,7 +18,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class AirplaneDaoImplTest {
 
     @BeforeEach
     public void setUp() {
-        DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
+        HikariDataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
         InputUtil.createTables(h2DataSource);
         InputUtil.populate(h2DataSource);
         airplaneDAO = new AirplaneDaoImpl(h2DataSource);
@@ -63,7 +63,7 @@ public class AirplaneDaoImplTest {
 
     @Test
     public void shouldCorrectlyFindAirplaneByCode() {
-        String code = "ABC123";
+        String code = "ABC321";
         Airplane expected = getAirplaneInstance(code, 1L, "Grey Crows");
         airplaneDAO.saveAirplane(expected);
 
@@ -90,14 +90,13 @@ public class AirplaneDaoImplTest {
     public void shouldCorrectlyFindAirplanesByCrewName() {
         String crewName = "Grey Crows";
         Airplane airplane = getAirplaneInstance("ABC123", 1L, crewName);
-        int airplanesCountBeforeInsert = airplaneDAO.findAllAirplanes().size();
 
         airplaneDAO.saveAirplane(airplane);
 
         List<Airplane> airplanes = airplaneDAO.searchAirplanesByCrewName(crewName);
 
         assertNotNull(airplanes.get(0).getId());
-        assertEquals(airplanesCountBeforeInsert + 1, airplanes.size());
+        assertEquals(1, airplanes.size());
         assertTrue(airplanes.contains(airplane));
     }
 

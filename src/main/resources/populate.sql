@@ -10,15 +10,15 @@ insert into crew (crew_name)
 values ('Bastards');
 
 insert into airplane (code_name, model, manufacture_date, capacity, flight_range)
-values ('ABC123', 'Boeing 777', '2000-03-03', 300, 3000, 1);
+values ('ABC123', 'Boeing 777', '2000-03-03', 300, 3000);
 insert into airplane (code_name, model, manufacture_date, capacity, flight_range)
-values ('QWE234', 'Airbus A350', '2000-03-03', 350, 4000, 2);
+values ('QWE234', 'Airbus A350', '2000-03-03', 350, 4000);
 insert into airplane (code_name, model, manufacture_date, capacity, flight_range)
-values ('ASD345', 'McDonnell Douglas MD-11', '2000-03-03', 150, 2000, 2);
+values ('ASD345', 'McDonnell Douglas MD-11', '2000-03-03', 150, 2000);
 insert into airplane (code_name, model, manufacture_date, capacity, flight_range)
-values ('ZXC456', 'Bombardier Dash 8', '2000-03-03', 450, 5000, 3);
+values ('ZXC456', 'Bombardier Dash 8', '2000-03-03', 450, 5000);
 insert into airplane (code_name, model, manufacture_date, capacity, flight_range)
-values ('WER567', 'Gulfstream G550', '2000-03-03', 550, 7000, 5);
+values ('WER567', 'Gulfstream G550', '2000-03-03', 550, 7000);
 
 insert into crew_member (first_name, last_name, position, birthday, citizenship)
 values ('John', 'Doe', 'Captain', '1985-05-10', 'United Kingdom');

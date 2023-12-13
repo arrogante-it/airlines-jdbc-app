@@ -7,6 +7,7 @@ import static com.airlines.jdbc.app.persistance.entities.Citizenship.UK;
 import com.airlines.jdbc.app.persistance.entities.CrewMember;
 import static com.airlines.jdbc.app.persistance.entities.Position.COR;
 import com.airlines.jdbc.app.persistance.exception.SqlOperationException;
+import com.zaxxer.hikari.HikariDataSource;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -14,7 +15,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import javax.sql.DataSource;
 import java.time.LocalDate;
 
 class CrewMemberDaoImplTest {
@@ -22,7 +22,7 @@ class CrewMemberDaoImplTest {
 
     @BeforeEach
     public void setUp() {
-        DataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
+        HikariDataSource h2DataSource = new TestDataSourceProvider().createDefaultInMemoryH2DataSource();
         InputUtil.createTables(h2DataSource);
         InputUtil.populate(h2DataSource);
         crewMemberDao = new CrewMemberDaoImpl(h2DataSource);
